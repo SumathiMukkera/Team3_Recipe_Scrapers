@@ -15,9 +15,7 @@ public class testsClass extends baseClass{
 	        pageObjectclass page = new pageObjectclass(driver,wait);
 	        
 	        page.clickRecipeList();
-	       
-	        driver.navigate().refresh();
-	        Thread.sleep(1000);
+	        page.removeAds();
 	        page.click_on_recipes();
 	        
 	        

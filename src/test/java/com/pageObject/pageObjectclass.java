@@ -12,12 +12,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class pageObjectclass {
-	 WebDriver driver;
+	   WebDriver driver;
 	    WebDriverWait wait;
+	    private JavascriptExecutor js;
 
 	    public pageObjectclass(WebDriver driver,WebDriverWait wait) {
 	        this.driver = driver;
 	        this.wait = wait;
+	        
 	        PageFactory.initElements(driver, this);
 	    }
 
@@ -37,8 +39,20 @@ public class pageObjectclass {
 	            wait.until(ExpectedConditions.elementToBeClickable(recipes_list));
 	            recipes_list.click();
 	        } catch (ElementClickInterceptedException e) {
-	            dismiss(); 
+	           // dismiss(); 
 	            clickRecipeList(); 
+	        }
+	    }
+	    
+	    public void removeAds() {
+	        try {
+	            js = (JavascriptExecutor) driver;
+	            js.executeScript(
+	                "const elements = document.getElementsByClassName('adsbygoogle adsbygoogle-noablate');" +
+	                "while (elements.length > 0) elements[0].remove();"
+	            );
+	        } catch (Exception e) {
+	            System.out.println("Ad removal failed: " + e.getMessage());
 	        }
 	    }
 
@@ -49,15 +63,18 @@ public class pageObjectclass {
 	    
 
 	    public void click_on_recipes() {
+	    	js.executeScript("window.scrollTo(0, -900);");
+	    	driver.get("https://www.tarladalal.com/recipes/");
+	    	/*for (WebElement element : recipes) {
+	    	    js.executeScript("arguments[0].scrollIntoView(true);", element);
+	    	}
 	           for (int i = 0; i < 24; i++) {
 	            try {
 	                recipes.get(i).click();
-	                driver.navigate().back(); 
-	               // PageFactory.initElements(driver, this); 
+	                 
 	            } catch (Exception e) {
 	                System.out.println("Skipping index " + i + ": " + e.getMessage());
-	            }
-	        }
+	            }*/
+	        //}
 	    }
-
 }
