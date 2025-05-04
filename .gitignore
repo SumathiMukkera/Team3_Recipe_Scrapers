@@ -43,3 +43,6 @@ test-output/
 logs/
 
 
+
+/target/
+.idea/
