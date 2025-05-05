@@ -15,6 +15,26 @@ public class pageObjectclass {
 	WebDriver driver;
 	WebDriverWait wait;
 	private JavascriptExecutor js;
+	
+	 @FindBy(xpath = "//a[text()='Recipes List']")
+	    public WebElement recipes_list;
+
+	    @FindBy(xpath = "//h5//a")
+	    public List<WebElement> recipes;
+	    
+	    @FindBy(xpath="//h4[@class='rec-heading']")
+	    WebElement recipeTitleElement;
+	    
+	    @FindBy(xpath ="(//p[@class='mb-0 font-size-13'])[1]")
+	    WebElement preparation_time;
+	    @FindBy(xpath ="(//p[@class='mb-0 font-size-13'])[2]")
+	    WebElement cooking_time;
+	    @FindBy(xpath ="(//p[@class='mb-0 font-size-13'])[3]")
+	    WebElement total_time;
+	    @FindBy(xpath ="(//div[@class='content']//p)[3]")
+	    WebElement noOfServings;
+	    @FindBy(xpath="//ul[@class='tags-list']//li")
+	   List<WebElement> tags;
 
 	public pageObjectclass(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -22,19 +42,7 @@ public class pageObjectclass {
 		PageFactory.initElements(driver, this);
 	}
 
-	@FindBy(xpath = "//a[text()='Recipes List']")
-	public WebElement recipes_list;
-
-	// @FindBy(xpath = "//span[text()='Close']")
-	// public WebElement dismiss_btn;
-
-	@FindBy(xpath = "//h5//a")
-	public List<WebElement> recipes;
-
-	@FindBy(xpath = "//h4[@class='rec-heading']")
-	WebElement recipeTitleElement;
-
-	public void clickRecipeList() {
+		public void clickRecipeList() {
 		try {
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", recipes_list);
 			// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -59,29 +67,39 @@ public class pageObjectclass {
 	public void click_on_recipes() {
 		driver.get("https://www.tarladalal.com/recipes/");
 		js.executeScript("window.scrollBy(0, 600);");
-		for (int i = 0; i < 24; i++) {
-			try {
-				js.executeScript("window.scrollBy(0, 600);");
-				recipes.get(i).click();
-				String recipeUrl = driver.getCurrentUrl();
-				// Split the URL by hyphen and 'r' to get the parts
-				String[] parts = recipeUrl.split("-");
-				// The recipe ID is the last part before 'r'
-				// RecipeID
-				String recipeId = parts[parts.length - 1].replace("r", "");
-				System.out.println(recipeId);
+		 for (int i = 0; i < 24; i++) {
+			    try {
+			       	recipes.get(i).click();
 
-				// Recipe Name
-				String recipetitle = recipeTitleElement.getText();
-				System.out.println(recipetitle);
+			        String recipeUrl = driver.getCurrentUrl();
+			        String[] parts = recipeUrl.split("-");
+			        String recipeId = parts[parts.length - 1].replace("r", "");
+			        System.out.println("Recipe ID: " + recipeId);
 
-				driver.navigate().back();
+			        String recipetitle = recipeTitleElement.getText();
+			        System.out.println("Recipe Title: " + recipetitle);
 
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
+			        
+
+			        System.out.println(preparation_time.getText());
+			        System.out.println(cooking_time.getText());
+			        System.out.println(noOfServings.getText());
+			        
+			        for(WebElement tag : tags) {
+			        String tagNames =	tag.getText();
+			        System.out.println(tagNames);
+			        	
+			        	
+			        }
+
+			        driver.navigate().back();
+			       // wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".rcc_recipename > a")));
+			    } catch (Exception e) {
+			        System.out.println(e.getMessage());
+			        driver.navigate().back();
+			    }
 			}
-			// }
-		}
+
 	}
 
 }

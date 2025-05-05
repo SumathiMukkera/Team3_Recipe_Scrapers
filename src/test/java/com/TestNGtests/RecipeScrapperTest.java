@@ -1,23 +1,28 @@
 package com.TestNGtests;
 
-import com.pageObject.HomePage;
-import com.pageObject.RecipeListPage;
+
 import org.testng.annotations.Test;
 
-public class RecipeScrapperTest {
+import com.BaseClass.baseClass;
+import com.pageObject.pageObjectclass;
 
-    private HomePage homePage;
-    private RecipeListPage recipeListPage;
-    private RecipeDatabase database;
+public class RecipeScrapperTest extends baseClass {
+
+    
+   
+    private DatabaseClass database;
 
     @Test
     void scrapeRecipe() {
-        homePage.launch();
-        homePage.navigateToRecipeList();
+       
 
-        recipeListPage.parseAllRecipesOnAllPages();
+    	pageObjectclass page = new pageObjectclass(driver,wait);
+	        
+	        page.clickRecipeList();
+	        page.removeAds();
+	        page.click_on_recipes();
 
-        database.persistAllRecipes();
+       
     }
 
 }
