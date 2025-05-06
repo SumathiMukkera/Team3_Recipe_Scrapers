@@ -89,16 +89,16 @@ public class pageObjectclass {
 				"cashew", "pistachio", "brazil nut", "walnut", "pine nut", "hazelnut", "macadamia nut", "pecan",
 				"peanut", "hemp seed", "sun flower seed", "sesame seed", "chia seed", "flax seed");
 
-		// Check for eliminate ❌
+		// Check for eliminate 
 		for (String ing : ingredients) {
 			for (String bad : eliminateList) {
 				if (ing.contains(bad)) {
-					return false; // ❌ Recipe invalid due to bad ingredient
+					return false; //Recipe invalid due to bad ingredient
 				}
 			}
 		}
 
-		// Check for add ✅ (must contain at least 1 from add list)
+		// Check for add (must contain at least 1 from add list)
 		boolean hasAdd = false;
 		for (String ing : ingredients) {
 			for (String good : addList) {
@@ -114,7 +114,7 @@ public class pageObjectclass {
 		return hasAdd; // valid only if at least one from add list
 	}
 
-	public void clickRecipeList() {
+	
 
 	  // Method to click on recipe list
 		public void clickRecipeList() {
@@ -147,7 +147,7 @@ public class pageObjectclass {
  		db.connect();
  		db.createTable(tableName);
 		driver.get("https://www.tarladalal.com/recipes/");
-	    int totalPages = 3; // change based on site total pages
+	    int totalPages = 5; // change based on site total pages
 	    for (int page = 1; page <= totalPages; page++) {
 	        System.out.println(" Scraping Page: " + page);
            
@@ -195,44 +195,53 @@ public class pageObjectclass {
 
 				// Wait for page to load
 				wait.until(ExpectedConditions.visibilityOf(recipeTitleElement));
-				// recipes.get(i).click();
-				String recipeUrl = driver.getCurrentUrl();
-				// Split the URL by hyphen and 'r' to get the parts
-				String[] parts = recipeUrl.split("-");
-				// The recipe ID is the last part before 'r'
-				// RecipeID
-				String recipeId = parts[parts.length - 1].replace("r", "");
-				System.out.println(recipeId);
+				  String recipeUrl = driver.getCurrentUrl();
+			        String[] parts = recipeUrl.split("-");
+			        String recipeId = parts[parts.length - 1].replace("r", "");
+			        System.out.println("Recipe ID: " + recipeId);
 
-				// Recipe Name
-				String recipetitle = recipeTitleElement.getText();
-				System.out.println(recipetitle);
+			        String recipetitle = recipeTitleElement.getText();
+			        System.out.println("Recipe_Name: " + recipetitle);
+				
+					String ingredients = "Ingredients";
+		             System.out.println("Ingredients");
+					
+		            String preparationTime = preparation_time.getText();
+					System.out.println(preparationTime );
+					
 
-				// List<String> tagTexts = new ArrayList<>();
-				String tagloca = "";
-				for (WebElement tag : tags) {
-					// tagTexts.add(tag.getText());
-					tagloca = tagloca + " " + tag.getText();
-				}
-				System.out.println("Recipe Tag:" + tagloca);
+					String cookingTime =cooking_time.getText();
+					
+					
+					List<String> currentIngredients = new ArrayList<>();
+		            for (WebElement ingredient : ingredientsList) {
+		                String ingText = ingredient.getText().toLowerCase().trim();
+		                currentIngredients.add(ingText);
+		            }
+		            
+		           			        
+			       
+			        String noOfServing = noOfServings.getText();
 
-				String recipeCategory = "";
-				for (String recipeCategoryOption : RECIPE_CATEGORY_OPTIONS) {
-					if (tagloca.toLowerCase().contains(recipeCategoryOption.toLowerCase())) {
-						recipeCategory = recipeCategoryOption;
-						break;
+				
+
+			        String tagloca = "";
+					for (WebElement tag : tags) {
+						// tagTexts.add(tag.getText());
+						tagloca = tagloca + " " + tag.getText();
 					}
-				}
+					System.out.println("Recipe Tag:" + tagloca);
+
+					String recipeCategory = "";
+					for (String recipeCategoryOption : RECIPE_CATEGORY_OPTIONS) {
+						if (tagloca.toLowerCase().contains(recipeCategoryOption.toLowerCase())) {
+							recipeCategory = recipeCategoryOption;
+							break;
+						}
+					}
 
 				System.out.println("Recipe Category:" + recipeCategory);
 
-				// Collect ingredients
-				List<String> currentIngredients = new ArrayList<>();
-
-				for (WebElement ingredient : ingredientsList) {
-					String ingText = ingredient.getText().toLowerCase().trim();
-					currentIngredients.add(ingText);
-				}
 				String ingredientsName = String.join(" ", currentIngredients);
 				System.out.println("Ingredients Name : " + ingredientsName);
 
@@ -255,7 +264,7 @@ public class pageObjectclass {
 				// logger.info("Food Category : " + foodCategory );
 				System.out.println("Food Category : " + foodCategory);
 
-				// ✅ Apply your rule here
+				//  Apply your rule here
 				if (isRecipeValid(currentIngredients)) {
 
 					System.out.println("========= Recipe accepted: " + recipetitle + "=========");
@@ -269,105 +278,39 @@ public class pageObjectclass {
 
 					}
 					System.out.println("===========================================");
-					// 🔥 Here you can save recipe to Excel/DB/file etc.
+					//Here you can save recipe to Excel/DB/file etc.
 				} else {
 					System.out.println("=====Recipe rejected: " + recipetitle + "=========");
 				}
-				// driver.navigate().back();
+				
+				Recipe recipe = new Recipe();
+				recipe.setRecipeID(recipeId);
+				recipe.setRecipeName(recipetitle);
+				recipe.setRecipeCategory(recipeCategory);
+				recipe.setFoodCategory(foodCategory);
+				recipe.setIngredients(ingredientsName);
+				recipe.setPreperationTime(preparationTime);
+				recipe.setCookingTime(cookingTime);
+				recipe.setTags(tagloca);
+				recipe.setNumOfServings(noOfServing);
+				recipe.setCuisineCategory("Cuisine_category");
+				recipe.setRecipeDescription("Recipe_Description");
+				recipe.setPreparationMethod("Preparation_method");
+				recipe.setNutritionValues("Nutrient_Values");
+				recipe.setRecipeUrl("Recipe_URL");
+				
+				// Add to list
+				allRecipesList.add(recipe);
 
-				// Close recipe tab and switch back
+
+				// Close recipe tab and switch back				
 				driver.close();
 				driver.switchTo().window(mainWindow);
 
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
-
-		js.executeScript("window.scrollBy(0, 300);");
-		 for (int i = 0; i < 24; i++) {
-			    try {
-			    	String mainWindow = driver.getWindowHandle();  // save main window
-
-		            // Open recipe link in new tab using JS
-		            js.executeScript("window.open(arguments[0]);", recipes.get(i).getAttribute("href"));
-
-		            // Switch to new tab
-		            for (String windowHandle : driver.getWindowHandles()) {
-		                if (!windowHandle.equals(mainWindow)) {
-		                    driver.switchTo().window(windowHandle);
-		                    break;
-		                }
-		            }
-
-					wait.until(ExpectedConditions.visibilityOf(recipeTitleElement));
-
-			        String recipeUrl = driver.getCurrentUrl();
-			        String[] parts = recipeUrl.split("-");
-			        String recipeId = parts[parts.length - 1].replace("r", "");
-			        System.out.println("Recipe ID: " + recipeId);
-
-			        String recipetitle = recipeTitleElement.getText();
-			        System.out.println("Recipe_Name: " + recipetitle);
-
-			        String recipeCategory = "Recipe_category";
-					System.out.println("Recipe_category");
-					
-					String AllFoodCategory = foodCategory.getText();
-					System.out.println("Food category "+AllFoodCategory);
-					
-					String ingredients = "Ingredients";
-		             System.out.println("Ingredients");
-					
-		             String preparationTime = preparation_time.getText();
-					System.out.println(preparationTime );
-					
-
-					String cookingTime =cooking_time.getText();
-					List<String> tagTexts = new ArrayList<>();
-					for (WebElement tag : tags) {
-						 tagTexts.add(tag.getText());
-					}	
-					
-					List<String> currentIngredients = new ArrayList<>();
-		            for (WebElement ingredient : ingredientsList) {
-		                String ingText = ingredient.getText().toLowerCase().trim();
-		                currentIngredients.add(ingText);
-		            }
-		            
-		           			        
-			        for(WebElement tag : tags) {
-			        String tagNames =	tag.getText();
-			        System.out.println(tagNames);       	
-			        	
-			        }
-			        String noOfServing = noOfServings.getText();				
-					
-					Recipe recipe = new Recipe();
-					recipe.setRecipeID(recipeId);
-					recipe.setRecipeName(recipetitle);
-					recipe.setRecipeCategory(recipeCategory);
-					recipe.setFoodCategory(AllFoodCategory);
-					recipe.setIngredients(ingredients);
-					recipe.setPreperationTime(preparationTime);
-					recipe.setCookingTime(cookingTime);
-					recipe.setTags("tags");
-					recipe.setNumOfServings(noOfServing);
-					recipe.setCuisineCategory("Cuisine_category");
-					recipe.setRecipeDescription("Recipe_Description");
-					recipe.setPreparationMethod("Preparation_method");
-					recipe.setNutritionValues("Nutrient_Values");
-					recipe.setRecipeUrl("Recipe_URL");
-					
-					// Add to list
-					allRecipesList.add(recipe);
-    
-
-					driver.close();
-		            driver.switchTo().window(mainWindow);
-			    } catch (Exception e) {
-			        System.out.println(e.getMessage());
-			        			    }
-
 			}
+		}
 
 	}
 	

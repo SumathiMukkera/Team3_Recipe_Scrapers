@@ -1,7 +1,7 @@
 package com.TestNGtests;
 
 
-import com.pageObject.RecipeListPage;
+
 import org.testng.annotations.Test;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
@@ -13,7 +13,7 @@ public class RecipeScrapperTest extends baseClass {
    
 	pageObjectclass page;
 
-    
+    @Test
     void scrapeRecipe() throws SQLException, TimeoutException {
        
 
