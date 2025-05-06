@@ -19,7 +19,7 @@ public class pageObjectclass {
 	private JavascriptExecutor js;
 	public static String[] EGGETARION_ELEMINATE_OPTIONS = new String[] { "veggie", "eggplant", "without egg",
 			"eggless" };
-	public static String[] VEGAN_EMINATE_OPTIONS = new String[] { "egg", "milk", "honey", "butter", "cheese", "ghee",
+	public static String[] VEGAN_ELEMINATE_OPTIONS = new String[] { "egg", "milk", "honey", "butter", "cheese", "ghee",
 			"gelatin", "mayonnaise", "cream", "whey", "casein", "paneer" };
 	public static final String[] RECIPE_CATEGORY_OPTIONS = { "breakfast", "lunch", "snack", "dinner" };
 
@@ -32,7 +32,7 @@ public class pageObjectclass {
 
 	@FindBy(xpath = "//a[text()='Recipes List']")
 	public WebElement recipes_list;
-	
+
 	@FindBy(xpath = "//h5//a")
 	public List<WebElement> recipes;
 
@@ -42,7 +42,7 @@ public class pageObjectclass {
 	WebElement foodCategory;
 	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
 	WebElement recipeCategory;
-	
+
 	@FindBy(xpath = "//div[@id=\"ingredients\"]/ul")
 	public List<WebElement> ingredientsList;
 	@FindBy(xpath = "//a[contains(text(), 'Next')]")
@@ -123,7 +123,7 @@ public class pageObjectclass {
 				break;
 		}
 
-		return hasAdd; //  valid only if at least one from add list
+		return hasAdd; // valid only if at least one from add list
 	}
 
 	public void clickRecipeList() {
@@ -178,15 +178,15 @@ public class pageObjectclass {
 				// Recipe Name
 				String recipetitle = recipeTitleElement.getText();
 				System.out.println(recipetitle);
-				
-				//List<String> tagTexts = new ArrayList<>();
+
+				// List<String> tagTexts = new ArrayList<>();
 				String tagloca = "";
 				for (WebElement tag : tags) {
-					 //tagTexts.add(tag.getText());
+					// tagTexts.add(tag.getText());
 					tagloca = tagloca + " " + tag.getText();
-				}	
-                 System.out.println("Recipe Tag:"+tagloca);
-			
+				}
+				System.out.println("Recipe Tag:" + tagloca);
+
 				String recipeCategory = "";
 				for (String recipeCategoryOption : RECIPE_CATEGORY_OPTIONS) {
 					if (tagloca.toLowerCase().contains(recipeCategoryOption.toLowerCase())) {
@@ -194,54 +194,55 @@ public class pageObjectclass {
 						break;
 					}
 				}
-				
+
 				System.out.println("Recipe Category:" + recipeCategory);
 
-				// ✅ Collect ingredients
+				// Collect ingredients
 				List<String> currentIngredients = new ArrayList<>();
-				
+
 				for (WebElement ingredient : ingredientsList) {
 					String ingText = ingredient.getText().toLowerCase().trim();
 					currentIngredients.add(ingText);
 				}
 				String ingredientsName = String.join(" ", currentIngredients);
-				//System.out.println("Ingredients Name : " + ingredientsName);
-				
-				String foodCategory = "Vegetarian";//by default food category is vegetarian
-				String combinedText = (tags + ingredientsName).toLowerCase();//combining tags and ingredientname for filtering
-				//using streams to check if there is any match with the ingredients in arraylist and the string
+				System.out.println("Ingredients Name : " + ingredientsName);
+
+				String foodCategory = "Vegetarian";// by default food category is vegetarian
+				String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
+																				// filtering
+				// using streams to check if there is any match with the ingredients in
+				// arraylist and the string
 				boolean isEggetarian = !Arrays.stream(EGGETARION_ELEMINATE_OPTIONS).anyMatch(combinedText::contains);
-				boolean isVegan = !Arrays.stream(VEGAN_EMINATE_OPTIONS).anyMatch(combinedText::contains);
-				if(combinedText.contains("egg") && isEggetarian ){
-					foodCategory = "Eggetarian"; 
-				} else if(combinedText.contains("jain")) { 
-					foodCategory = "Jain"; 
-				} else if(isVegan || combinedText.contains("vegan")
-						||recipeUrl.contains("vegan")
-						){ 
-					foodCategory = "Vegan"; 
-				} 
-				else if(combinedText.contains("non-veg")) { 
-					foodCategory = "Non-Veg"; 
+				boolean isVegan = !Arrays.stream(VEGAN_ELEMINATE_OPTIONS).anyMatch(combinedText::contains);
+				if (combinedText.contains("egg") && isEggetarian) {
+					foodCategory = "Eggetarian";
+				} else if (combinedText.contains("jain")) {
+					foodCategory = "Jain";
+				} else if (isVegan || combinedText.contains("vegan") || recipeUrl.contains("vegan")) {
+					foodCategory = "Vegan";
+				} else if (combinedText.contains("non-veg")) {
+					foodCategory = "Non-Veg";
 				}
-				//logger.info("Food Category : " + foodCategory );
-				System.out.println("Food Category : " + foodCategory );
+				// logger.info("Food Category : " + foodCategory );
+				System.out.println("Food Category : " + foodCategory);
 
 				// ✅ Apply your rule here
 				if (isRecipeValid(currentIngredients)) {
-					System.out.println(" Recipe accepted: " + recipetitle);
+
+					System.out.println("========= Recipe accepted: " + recipetitle + "=========");
 					System.out.println("ID: " + recipeId);
 					System.out.println("FoodCategory: " + foodCategory);
 					System.out.println("Recipe Category:" + recipeCategory);
-					
+
 					System.out.println("Ingredients:");
 					for (String ing : currentIngredients) {
 						System.out.println("- " + ing);
+
 					}
 					System.out.println("===========================================");
 					// 🔥 Here you can save recipe to Excel/DB/file etc.
 				} else {
-					System.out.println("=====Recipe rejected: " + recipetitle);
+					System.out.println("=====Recipe rejected: " + recipetitle + "=========");
 				}
 				// driver.navigate().back();
 
