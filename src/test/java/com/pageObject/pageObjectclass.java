@@ -35,6 +35,8 @@ public class pageObjectclass {
 	    WebElement noOfServings;
 	    @FindBy(xpath="//ul[@class='tags-list']//li")
 	   List<WebElement> tags;
+	    @FindBy(xpath ="//*[@id=\"aboutrecipe\"]/p[1]")
+	    WebElement aboutrecipe;
 
 	public pageObjectclass(WebDriver driver, WebDriverWait wait) {
 		this.driver = driver;
@@ -84,6 +86,10 @@ public class pageObjectclass {
 			        System.out.println(preparation_time.getText());
 			        System.out.println(cooking_time.getText());
 			        System.out.println(noOfServings.getText());
+			        
+			        //Recipe Description from webpage.
+			        String recipeDescription = aboutrecipe.getText();
+			        System.out.println("Recipe Description: "  +recipeDescription);
 			        
 			        for(WebElement tag : tags) {
 			        String tagNames =	tag.getText();
