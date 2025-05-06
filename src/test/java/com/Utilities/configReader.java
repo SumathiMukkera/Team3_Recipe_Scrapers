@@ -25,7 +25,7 @@ public class configReader {
 		} catch (IOException e) {
 			
 			e.printStackTrace();
-		}
+		}      
 		return prop;
 	}
 	
