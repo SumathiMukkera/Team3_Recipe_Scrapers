@@ -1,44 +1,31 @@
 package com.TestNGtests;
 
-import com.BaseClass.baseClass;
-import com.pageObject.HomePage;
+
 import com.pageObject.RecipeListPage;
+import org.testng.annotations.Test;
+import java.sql.SQLException;
+import java.util.concurrent.TimeoutException;
+import com.BaseClass.baseClass;
 import com.pageObject.pageObjectclass;
 
-import org.testng.annotations.Test;
 
-public class RecipeScrapperTest extends baseClass {
-
-   /* private HomePage homePage=new HomePage() ;
-    
+public class RecipeScrapperTest extends baseClass { 
+   
+	pageObjectclass page;
 
     
-    private RecipeListPage recipeListPage;
-    private RecipeDatabase database;
+    void scrapeRecipe() throws SQLException, TimeoutException {
+       
 
-  
-    @Test
-    void scrapeRecipe() {
-       // homePage.launch();
-       // homePage.navigateToRecipeList();
-
-    
-       // recipeListPage.parseAllRecipesOnAllPages();
-
-        //database.persistAllRecipes();
-    }*/
-	 @Test
-	    public void verifyRecipeListClick() throws InterruptedException {
-	        pageObjectclass page = new pageObjectclass(driver,wait);
+    	 page = new pageObjectclass(driver,wait);
 	        
-	        page.clickRecipeList();
-	       
+    	  page.clickRecipeList();	          
 	        driver.navigate().refresh();
-	        Thread.sleep(1000);
-	        //page.click_on_recipes();
-	        
+	        page.removeAds();	        
 	        page.click_on_recipes_with_pagination();
-	        
+	      
+
+       
 
 }
 }
