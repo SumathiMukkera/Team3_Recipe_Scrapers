@@ -1,11 +1,9 @@
 package com.pageObject;
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import java.sql.SQLException;
-
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
@@ -18,21 +16,22 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.TestNGtests.DatabaseClass;
+import com.TestNGtests.dataBaseClass;
 
 
 public class pageObjectclass {
-
+	 
 	WebDriver driver;
 	WebDriverWait wait;
 	private JavascriptExecutor js;
+	dataBaseClass db;
 	public static String[] EGGETARION_ELEMINATE_OPTIONS = new String[] { "veggie", "eggplant", "without egg",
 			"eggless" };
 	public static String[] VEGAN_ELEMINATE_OPTIONS = new String[] { "egg", "milk", "honey", "butter", "cheese", "ghee",
 			"gelatin", "mayonnaise", "cream", "whey", "casein", "paneer" };
 	public static final String[] RECIPE_CATEGORY_OPTIONS = { "breakfast", "lunch", "snack", "dinner" };
 
-	DatabaseClass db;
+	
 	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	String tableName = "recipes";
 	
@@ -51,19 +50,18 @@ public class pageObjectclass {
 	 @FindBy(xpath = "//a[@class='page-link' and text()='Next']")  public WebElement pageNextButton;
 	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
 	WebElement recipeCategory;
+	@FindBy(xpath = "//p[text()='You are here: ']//span[3]")
+    public WebElement cusine_category;
 	 
+	 public pageObjectclass(WebDriver driver, WebDriverWait wait) {
+
+			this.driver = driver;
+			this.wait = wait;
+			this.js = (JavascriptExecutor) driver;
+			PageFactory.initElements(driver, this);
+		}
 	 
-	  public pageObjectclass(WebDriver driver, WebDriverWait wait) {
-
-		this.driver = driver;
-		this.wait = wait;
-		this.js = (JavascriptExecutor) driver;
-		PageFactory.initElements(driver, this);
-	}
-
-	
-
-		
+	 	
 	private boolean isRecipeValid(List<String> ingredients) {
 		List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",
 				"bacon", "milk", "cheese", "yogurt", "butter", "ice cream", "egg", "prawn", "oil", "olive oil",
@@ -73,10 +71,12 @@ public class pageObjectclass {
 				"soy milk", "white miso paste", "soy sauce", "soy curls", "edamame", "soy yogurt", "soy nut", "tofu",
 				"pies", "chip", "cracker", "potatoe", "sugar", "jaggery", "glucose", "fructose", "corn syrup",
 				"cane sugar", "aspartame", "cane solid", "maltose", "dextrose", "sorbitol", "mannitol", "xylitol",
-				"maltodextrin", "molasses", "brown rice syrup", "splenda", "nutra sweet", "stevia", "barley malt"
+				"maltodextrin", "molasses", "brown rice syrup", "splenda", "nutra sweet", "stevia", "barley malt");
 
-		);
-
+	
+		
+	    
+	   
 		List<String> addList = Arrays.asList("lettuce", "kale", "chard", "arugula", "spinach", "cabbage", "pumpkin",
 				"sweet potatoes", "purple potatoes", "yams", "turnip", "karela", "bittergourd", "beet", "carrot",
 				"cucumber", "red onion", "white onion", "broccoli", "cauliflower", "celery", "artichoke", "bell pepper",
@@ -130,7 +130,6 @@ public class pageObjectclass {
 		}
 	}
 
-	// Method to remove ads	
 	public void removeAds() {
 		try {
 			js.executeScript("const elements = document.getElementsByClassName('adsbygoogle adsbygoogle-noablate');"
@@ -142,7 +141,7 @@ public class pageObjectclass {
 	
 	// Method for navigation
 	public void click_on_recipes_with_pagination() throws SQLException, TimeoutException {
-		db = new DatabaseClass();
+		db = new dataBaseClass();
 		db.createDatabase();
  		db.connect();
  		db.createTable(tableName);
@@ -263,6 +262,8 @@ public class pageObjectclass {
 				}
 				// logger.info("Food Category : " + foodCategory );
 				System.out.println("Food Category : " + foodCategory);
+				
+				String cusineCategory = cusine_category.getText();
 
 				//  Apply your rule here
 				if (isRecipeValid(currentIngredients)) {
@@ -293,7 +294,7 @@ public class pageObjectclass {
 				recipe.setCookingTime(cookingTime);
 				recipe.setTags(tagloca);
 				recipe.setNumOfServings(noOfServing);
-				recipe.setCuisineCategory("Cuisine_category");
+				recipe.setCuisineCategory(cusineCategory);
 				recipe.setRecipeDescription("Recipe_Description");
 				recipe.setPreparationMethod("Preparation_method");
 				recipe.setNutritionValues("Nutrient_Values");
@@ -322,5 +323,6 @@ public class pageObjectclass {
 					recipe.getFoodCategory(), recipe.getRecipeCategory() ,recipe.getTags(), recipe.getNutritionValues(), recipe.getRecipeUrl());
 		}
 	}
+
 
 }
