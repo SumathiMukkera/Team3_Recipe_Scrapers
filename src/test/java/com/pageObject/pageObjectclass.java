@@ -32,7 +32,6 @@ public class pageObjectclass {
 			"gelatin", "mayonnaise", "cream", "whey", "casein", "paneer" };
 	public static final String[] RECIPE_CATEGORY_OPTIONS = { "breakfast", "lunch", "snack", "dinner" };
 
-	public pageObjectclass(WebDriver driver, WebDriverWait wait)
 	DatabaseClass db;
 	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	String tableName = "recipes";
@@ -50,6 +49,8 @@ public class pageObjectclass {
 	 @FindBy(xpath = "//div[@id=\"ingredients\"]/ul")	public List<WebElement> ingredientsList;
 	 @FindBy(xpath = "//a[contains(text(), 'Next')]")   public WebElement nextPageButton;
 	 @FindBy(xpath = "//a[@class='page-link' and text()='Next']")  public WebElement pageNextButton;
+	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
+	WebElement recipeCategory;
 	 
 	 
 	  public pageObjectclass(WebDriver driver, WebDriverWait wait) {
@@ -60,53 +61,9 @@ public class pageObjectclass {
 		PageFactory.initElements(driver, this);
 	}
 
+	
 
-	@FindBy(xpath = "//a[text()='Recipes List']")
-	public WebElement recipes_list;
-
-	@FindBy(xpath = "//h5//a")
-	public List<WebElement> recipes;
-
-	@FindBy(xpath = "//h4[@class='rec-heading']")
-	WebElement recipeTitleElement;
-	@FindBy(xpath = "//a[starts-with(@href, '/recipes-for-') and not(contains(@href, 'cuisine')) and not(contains(@href, 'course')) and not(contains(@href, 'occasion'))]")
-	WebElement foodCategory;
-	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
-	WebElement recipeCategory;
-
-	@FindBy(xpath = "//div[@id=\"ingredients\"]/ul")
-	public List<WebElement> ingredientsList;
-	@FindBy(xpath = "//a[contains(text(), 'Next')]")
-	public WebElement nextPageButton;
-	@FindBy(xpath = "//ul[@class='tags-list']//li")
-	public List<WebElement> tags;
-
-	public void click_on_recipes_with_pagination() {
-		driver.get("https://www.tarladalal.com/recipes/");
-		int totalPages = 5; // change based on site total pages
-		for (int page = 1; page <= totalPages; page++) {
-			System.out.println(" Scraping Page: " + page);
-
-			// Scrape current page recipes
-			click_on_recipes(); // your existing method
-
-			// Click next page (except after last page)
-			if (page != totalPages) {
-				try {
-					// nextPageButton.click();
-					String currentUrl = driver.getCurrentUrl();
-					((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextPageButton);
-					Thread.sleep(500); // wait for scroll
-					((JavascriptExecutor) driver).executeScript("arguments[0].click();", nextPageButton);
-					wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentUrl)));
-				} catch (Exception e) {
-					System.out.println("Failed to go next page: " + e.getMessage());
-					break;
-				}
-			}
-		}
-	}
-
+		
 	private boolean isRecipeValid(List<String> ingredients) {
 		List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",
 				"bacon", "milk", "cheese", "yogurt", "butter", "ice cream", "egg", "prawn", "oil", "olive oil",
