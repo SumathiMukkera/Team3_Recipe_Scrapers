@@ -1,11 +1,10 @@
 package com.TestNGtests;
 
 
+import com.pageObject.RecipeListPage;
+import org.testng.annotations.Test;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
-
-import org.testng.annotations.Test;
-
 import com.BaseClass.baseClass;
 import com.pageObject.pageObjectclass;
 
@@ -14,7 +13,7 @@ public class RecipeScrapperTest extends baseClass {
    
 	pageObjectclass page;
 
-    @Test
+    
     void scrapeRecipe() throws SQLException, TimeoutException {
        
 
@@ -27,6 +26,6 @@ public class RecipeScrapperTest extends baseClass {
 	      
 
        
-    }
 
+}
 }
