@@ -52,6 +52,7 @@ public class pageObjectclass {
 	WebElement recipeCategory;
 	@FindBy(xpath = "//p[text()='You are here: ']//span[3]")
     public WebElement cusine_category;
+	 @FindBy(xpath ="//*[@id=\"aboutrecipe\"]/p[1]") public   WebElement aboutrecipe;
 	 
 	 public pageObjectclass(WebDriver driver, WebDriverWait wait) {
 
@@ -262,6 +263,9 @@ public class pageObjectclass {
 				}
 				// logger.info("Food Category : " + foodCategory );
 				System.out.println("Food Category : " + foodCategory);
+				
+				 String recipeDescription = aboutrecipe.getText();
+			        System.out.println("Recipe Description: "  +recipeDescription);
 				
 				String cusineCategory = cusine_category.getText();
 
