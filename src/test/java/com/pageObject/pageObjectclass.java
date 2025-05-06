@@ -1,6 +1,7 @@
 package com.pageObject;
 
 import java.util.List;
+
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -11,77 +12,70 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class pageObjectclass {
+	 WebDriver driver;
+	    WebDriverWait wait;
 
-	WebDriver driver;
-	WebDriverWait wait;
-	private JavascriptExecutor js;
+	    public pageObjectclass(WebDriver driver,WebDriverWait wait) {
+	        this.driver = driver;
+	        this.wait = wait;
+	        PageFactory.initElements(driver, this);
+	    }
 
-	public pageObjectclass(WebDriver driver, WebDriverWait wait) {
-		this.driver = driver;
-		this.wait = wait;
-		PageFactory.initElements(driver, this);
-	}
+	    @FindBy(xpath = "//a[text()='Recipes List']")
+	    public WebElement recipes_list;
 
-	@FindBy(xpath = "//a[text()='Recipes List']")
-	public WebElement recipes_list;
+	    @FindBy(xpath = "//span[text()='Close']")
+	    public WebElement dismiss_btn;
 
-	// @FindBy(xpath = "//span[text()='Close']")
-	// public WebElement dismiss_btn;
+	    @FindBy(className = "two-line-text")
+	    public List<WebElement> recipes;
+	    
+	    @FindBy(xpath = "//p[text()='You are here: ']//span[3]")
+	    public WebElement cusine_category;
 
-	@FindBy(xpath = "//h5//a")
-	public List<WebElement> recipes;
+	    public void clickRecipeList() {
+	        try {
+	            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", recipes_list);
+	           // WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	            wait.until(ExpectedConditions.elementToBeClickable(recipes_list));
+	            recipes_list.click();
+	        } catch (ElementClickInterceptedException e) {
+	            dismiss(); 
+	            clickRecipeList(); 
+	        }
+	    }
 
-	@FindBy(xpath = "//h4[@class='rec-heading']")
-	WebElement recipeTitleElement;
+	    public void dismiss() {
+	    	
+	            dismiss_btn.click();
+	        }
+	    
 
-	public void clickRecipeList() {
-		try {
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", recipes_list);
-			// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-			wait.until(ExpectedConditions.elementToBeClickable(recipes_list));
-			recipes_list.click();
-		} catch (ElementClickInterceptedException e) {
-			// dismiss();
-			clickRecipeList();
-		}
-	}
+	    public void click_on_recipes() {
+	           for (int i = 0; i < 24; i++) {
+	            try {
+	                recipes.get(i).click();
+	                driver.navigate().back(); 
+	               // PageFactory.initElements(driver, this); 
+	            } catch (Exception e) {
+	                System.out.println("Skipping index " + i + ": " + e.getMessage());
+	            }
+	        }
+	           
+	        	   
+	           }
+	    
 
-	public void removeAds() {
-		try {
-			js = (JavascriptExecutor) driver;
-			js.executeScript("const elements = document.getElementsByClassName('adsbygoogle adsbygoogle-noablate');"
-					+ "while (elements.length > 0) elements[0].remove();");
-		} catch (Exception e) {
-			System.out.println("Ads removed" + e.getMessage());
-		}
-	}
+     public String getCusineCategory() {
+    	 
+    	 String cuisineTitle =  cusine_category.getText().trim();
+			
+			int index = cuisineTitle.indexOf(">");
+		    if (index != -1) {
+		        cuisineTitle = cuisineTitle.substring(0, index).trim();
+		    }
 
-	public void click_on_recipes() {
-		driver.get("https://www.tarladalal.com/recipes/");
-		js.executeScript("window.scrollBy(0, 600);");
-		for (int i = 0; i < 24; i++) {
-			try {
-				js.executeScript("window.scrollBy(0, 600);");
-				recipes.get(i).click();
-				String recipeUrl = driver.getCurrentUrl();
-				// Split the URL by hyphen and 'r' to get the parts
-				String[] parts = recipeUrl.split("-");
-				// The recipe ID is the last part before 'r'
-				// RecipeID
-				String recipeId = parts[parts.length - 1].replace("r", "");
-				System.out.println(recipeId);
-
-				// Recipe Name
-				String recipetitle = recipeTitleElement.getText();
-				System.out.println(recipetitle);
-
-				driver.navigate().back();
-
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-			// }
-		}
-	}
-
+		return cuisineTitle;
+	
+      }
 }

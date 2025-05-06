@@ -85,6 +85,8 @@ public class DataBaseClass {
 	        } catch (SQLException e) {
 	            System.out.println(e.getMessage());
 	        }
-	    }}
+	    }
+	    
+}
 
 
