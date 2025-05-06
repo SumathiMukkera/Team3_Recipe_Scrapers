@@ -68,7 +68,14 @@ public class pageObjectclass {
 
      public String getCusineCategory() {
     	 
-		return cusine_category.getText();
+    	 String cuisineTitle =  cusine_category.getText().trim();
+			
+			int index = cuisineTitle.indexOf(">");
+		    if (index != -1) {
+		        cuisineTitle = cuisineTitle.substring(0, index).trim();
+		    }
+
+		return cuisineTitle;
 	
       }
 }
