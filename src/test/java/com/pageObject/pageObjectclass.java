@@ -1,7 +1,9 @@
 package com.pageObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -32,7 +34,8 @@ public class pageObjectclass {
 	    
 	    @FindBy(xpath = "//p[text()='You are here: ']//span[3]")
 	    public WebElement cusine_category;
-
+	    
+	   
 	    public void clickRecipeList() {
 	        try {
 	            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", recipes_list);
@@ -46,8 +49,14 @@ public class pageObjectclass {
 	    }
 
 	    public void dismiss() {
-	    	
+	    	try {
 	            dismiss_btn.click();
+	    	}
+	    	catch(Exception e) {
+	    		
+	    		e.printStackTrace();
+	    		
+	    	}
 	        }
 	    
 
@@ -68,7 +77,33 @@ public class pageObjectclass {
 
      public String getCusineCategory() {
     	 
-		return cusine_category.getText();
+    	 String cuisineTitle =  cusine_category.getText().trim();
+			
+			int index = cuisineTitle.indexOf(">");
+		    if (index != -1) {
+		        cuisineTitle = cuisineTitle.substring(0, index).trim();
+		    }
+
+		return cuisineTitle;
 	
       }
+     
+     public List<String> getIngredients() {
+		  
+		  List<WebElement> ingredients = driver.findElements(By.xpath("//div[@id=\"ingredients\"]/ul"));
+		  
+		  System.out.println(ingredients);
+		  
+		  List<String> Ingre = new ArrayList<>();
+		  
+		  for(WebElement ingredient : ingredients) {
+			  
+			   Ingre.add(ingredient.getText());
+			  
+		  }
+		  
+		  System.out.println(Ingre);
+		return Ingre;
+	  }
+     
 }
