@@ -29,6 +29,9 @@ public class pageObjectclass {
 
 	    @FindBy(className = "two-line-text")
 	    public List<WebElement> recipes;
+	    
+	    @FindBy(xpath = "//p[text()='You are here: ']//span[3]")
+	    public WebElement cusine_category;
 
 	    public void clickRecipeList() {
 	        try {
@@ -58,6 +61,14 @@ public class pageObjectclass {
 	                System.out.println("Skipping index " + i + ": " + e.getMessage());
 	            }
 	        }
-	    }
+	           
+	        	   
+	           }
+	    
 
+     public String getCusineCategory() {
+    	 
+		return cusine_category.getText();
+	
+      }
 }
