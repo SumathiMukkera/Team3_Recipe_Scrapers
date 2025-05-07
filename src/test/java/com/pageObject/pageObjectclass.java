@@ -79,12 +79,12 @@ public class pageObjectclass {
 			PageFactory.initElements(driver, this);
 		}
 	 
-	 public List<String> getValuesByColumn(String columnName) throws InvalidFormatException, IOException {
+	 public List<String> getValuesByColumn(String sheetName, String columnName) throws InvalidFormatException, IOException {
 			 
 			 ExcelDataReader reader = new ExcelDataReader();
 		        configReader cofgreader = new configReader();
 		        String filepath = cofgreader.getexcelfilepath();
-		        String sheetname = cofgreader.getSheetName();
+		        String sheetname = cofgreader.getSheetName(sheetName);
 		        
 		        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
 		         
@@ -105,11 +105,11 @@ public class pageObjectclass {
 		
 		
 
-		List<String> eliminateList =  getValuesByColumn("Eliminate");
+		List<String> eliminateList =  getValuesByColumn("LFV_sheet" ," Eliminate");
 		
 		System.out.println("eliminate items :" + eliminateList);
 		
-		List<String> addList = getValuesByColumn("Add");
+		List<String> addList = getValuesByColumn("LFV_sheet", "Add");
 		System.out.println("Add Items List : " + addList);
 	
 		/*List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",

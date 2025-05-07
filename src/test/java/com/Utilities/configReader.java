@@ -41,10 +41,11 @@ public class configReader {
 	  return prop.getProperty("excelFilePath");
 	}	
 	
-	public  String getSheetName() {
+	public  String getSheetName(String sheetname) {
 		init_prop();
-		return prop.getProperty("LFV_sheet");
+		return prop.getProperty(sheetname);
 	}
-
+	
+	
 
 }
