@@ -1,18 +1,22 @@
 package com.pageObject;
 
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-
 import org.openqa.selenium.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.TestNGtests.dataBaseClass;
 
 
@@ -28,6 +32,7 @@ public class pageObjectclass {
 			"gelatin", "mayonnaise", "cream", "whey", "casein", "paneer" };
 	public static final String[] RECIPE_CATEGORY_OPTIONS = { "breakfast", "lunch", "snack", "dinner" };
 
+
 	
 	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	String tableName = "recipes";
@@ -40,8 +45,8 @@ public class pageObjectclass {
 	 @FindBy(xpath ="(//p[@class='mb-0 font-size-13'])[3]")  public  WebElement total_time;
 	 @FindBy(xpath ="(//div[@class='content']//p)[3]")  public  WebElement noOfServings;
 	 @FindBy(xpath="//ul[@class='tags-list']//li")   public  List<WebElement> tags;
-	 @FindBy(xpath = "//a[starts-with(@href, '/recipes-for-') and not(contains(@href, 'cuisine')) and not(contains(@href, 'course')) and not(contains(@href, 'occasion'))]")
-	 public WebElement foodCategory;
+	/* @FindBy(xpath = "//a[starts-with(@href, '/recipes-for-') and not(contains(@href, 'cuisine')) and not(contains(@href, 'course')) and not(contains(@href, 'occasion'))]")
+	 public WebElement foodCategory;*/
 	 @FindBy(xpath = "//div[@id=\"ingredients\"]/ul")	public List<WebElement> ingredientsList;
 	 @FindBy(xpath = "//a[contains(text(), 'Next')]")   public WebElement nextPageButton;
 	 @FindBy(xpath = "//a[@class='page-link' and text()='Next']")  public WebElement pageNextButton;
@@ -66,9 +71,8 @@ public class pageObjectclass {
 			this.wait = wait;
 			this.js = (JavascriptExecutor) driver;
 			PageFactory.initElements(driver, this);
-		}
-	 
-	 	
+	}
+	
 	private boolean isRecipeValid(List<String> ingredients) {
 		List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",
 				"bacon", "milk", "cheese", "yogurt", "butter", "ice cream", "egg", "prawn", "oil", "olive oil",
@@ -105,7 +109,9 @@ public class pageObjectclass {
 			}
 		}
 
-		// Check for add (must contain at least 1 from add list)
+
+		// Check for add  (must contain at least 1 from add list)
+
 		boolean hasAdd = false;
 		for (String ing : ingredients) {
 			for (String good : addList) {
@@ -125,15 +131,13 @@ public class pageObjectclass {
 
 	  // Method to click on recipe list
 		public void clickRecipeList() {
-
 		try {
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", recipes_list);
+			// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			wait.until(ExpectedConditions.elementToBeClickable(recipes_list));
 			recipes_list.click();
 		} catch (ElementClickInterceptedException e) {
-
 			clickRecipeList();
-
 		}
 	}
 
@@ -145,6 +149,7 @@ public class pageObjectclass {
 			System.out.println("Ads removed" + e.getMessage());
 		}
 	}
+
 	
 	// Method for navigation
 	public void click_on_recipes_with_pagination() throws SQLException, TimeoutException {
@@ -178,10 +183,7 @@ public class pageObjectclass {
 	    insertRecipesIntoTable("recipes", allRecipesList); // insert method to add values to the table
 	}
 	
-
-	// Method to get all categories
 	public void click_on_recipes() {
-
 		// driver.get("https://www.tarladalal.com/recipes/");
 		js.executeScript("window.scrollBy(0, 100);");
 		for (int i = 0; i < 24; i++) {
@@ -344,6 +346,7 @@ public class pageObjectclass {
 				driver.switchTo().window(mainWindow);
 
 			} catch (Exception e) {
+
 				System.out.println("Exception: " + e.getMessage());
 			}
 		}
@@ -356,8 +359,10 @@ public class pageObjectclass {
 					recipe.getIngredients(), recipe.getPreperationTime(), recipe.getCookingTime(),
 					recipe.getPreparationMethod(), recipe.getNumOfServings(), recipe.getCuisineCategory(),
 					recipe.getFoodCategory(), recipe.getRecipeCategory() ,recipe.getTags(), recipe.getNutritionValues(), recipe.getRecipeUrl());
+							}
+		
 		}
-	}
+	
 
 	public void clickUsingJavascriptExecutor(WebElement element) {
 		JavascriptExecutor ex = (JavascriptExecutor)driver;
@@ -367,3 +372,4 @@ public class pageObjectclass {
 
 
 }
+
