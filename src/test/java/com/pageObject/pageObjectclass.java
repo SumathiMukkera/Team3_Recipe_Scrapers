@@ -7,10 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -48,10 +45,20 @@ public class pageObjectclass {
 	 @FindBy(xpath = "//div[@id=\"ingredients\"]/ul")	public List<WebElement> ingredientsList;
 	 @FindBy(xpath = "//a[contains(text(), 'Next')]")   public WebElement nextPageButton;
 	 @FindBy(xpath = "//a[@class='page-link' and text()='Next']")  public WebElement pageNextButton;
-	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
-	WebElement recipeCategory;
+	 @FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]") 	WebElement recipeCategory;
+
 	@FindBy(xpath = "//p[text()='You are here: ']//span[3]")
     public WebElement cusine_category;
+	 @FindBy(xpath ="//*[@id=\"aboutrecipe\"]/p[1]") public   WebElement aboutrecipe;
+
+	@FindBy (xpath="//a[@class='scroll-link' and @href='#nutrients']")
+	WebElement nutrientValue;
+
+	@FindBy (xpath = "//figure/table")
+	WebElement nutrientTable;
+
+	@FindBy (xpath = "//*[@id='methods']")
+	WebElement prepMethod;
 	 
 	 public pageObjectclass(WebDriver driver, WebDriverWait wait) {
 
@@ -243,6 +250,31 @@ public class pageObjectclass {
 
 				String ingredientsName = String.join(" ", currentIngredients);
 				System.out.println("Ingredients Name : " + ingredientsName);
+				//Prep_method
+				removeAds();
+				String prepMethodTxt = prepMethod.getText();
+				System.out.println("Preparation Method : " +prepMethodTxt);
+
+				//Nutrient Values
+				removeAds();
+				clickUsingJavascriptExecutor(nutrientValue);
+
+				String nutValues = "";
+				try {
+					if (nutrientTable.isDisplayed()) {
+						nutValues = nutrientTable.getText();
+					}
+				}
+				catch (NoSuchElementException ex){
+					nutValues = "Nutrient values are not listed";
+				}
+				System.out.println("Nutrient Values: " + nutValues);
+
+				//Recipe_URL
+				removeAds();
+				String recipeURL = driver.getCurrentUrl();
+				System.out.println("Recipe URL  :" + recipeURL);
+
 
 				String foodCategory = "Vegetarian";// by default food category is vegetarian
 				String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
@@ -262,6 +294,9 @@ public class pageObjectclass {
 				}
 				// logger.info("Food Category : " + foodCategory );
 				System.out.println("Food Category : " + foodCategory);
+				
+				 String recipeDescription = aboutrecipe.getText();
+			        System.out.println("Recipe Description: "  +recipeDescription);
 				
 				String cusineCategory = cusine_category.getText();
 
@@ -296,9 +331,9 @@ public class pageObjectclass {
 				recipe.setNumOfServings(noOfServing);
 				recipe.setCuisineCategory(cusineCategory);
 				recipe.setRecipeDescription("Recipe_Description");
-				recipe.setPreparationMethod("Preparation_method");
-				recipe.setNutritionValues("Nutrient_Values");
-				recipe.setRecipeUrl("Recipe_URL");
+				recipe.setPreparationMethod(prepMethodTxt);
+				recipe.setNutritionValues(nutValues);
+				recipe.setRecipeUrl(recipeURL);
 				
 				// Add to list
 				allRecipesList.add(recipe);
@@ -309,7 +344,7 @@ public class pageObjectclass {
 				driver.switchTo().window(mainWindow);
 
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				System.out.println("Exception: " + e.getMessage());
 			}
 		}
 
@@ -323,6 +358,12 @@ public class pageObjectclass {
 					recipe.getFoodCategory(), recipe.getRecipeCategory() ,recipe.getTags(), recipe.getNutritionValues(), recipe.getRecipeUrl());
 		}
 	}
+
+	public void clickUsingJavascriptExecutor(WebElement element) {
+		JavascriptExecutor ex = (JavascriptExecutor)driver;
+		ex.executeScript("arguments[0].click();", element);
+	}
+
 
 
 }
