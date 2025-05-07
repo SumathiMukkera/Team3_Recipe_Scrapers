@@ -11,8 +11,10 @@ public class DataProviderClass {
 	   @DataProvider(name = "excelData")
 	    public Object[][] excelDataProvider() throws IOException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
 	        ExcelDataReader reader = new ExcelDataReader();
-	        String filepath = configReader.getexcelfilepath();
-	        String sheetname = configReader.getSheetName();
+	        configReader cofgreader = new configReader();
+	        String filepath = cofgreader.getexcelfilepath();
+	        String sheetname = cofgreader.getSheetName();
+	        
 	        List<Map<String, String>> list = reader.getData(filepath , sheetname);
 	        
 	        Object[][] data = new Object[list.size()][1];

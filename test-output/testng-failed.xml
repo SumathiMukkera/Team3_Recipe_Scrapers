@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.TestNGtests.testsClass">
+      <class name="com.TestNGtests.RecipeScrapperTest">
         <methods>
           <include name="setup"/>
           <include name="tearDown"/>
-          <include name="getAllrecipeListfromPage"/>
+          <include name="scrapeRecipe"/>
         </methods>
-      </class> <!-- com.TestNGtests.testsClass -->
+      </class> <!-- com.TestNGtests.RecipeScrapperTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
