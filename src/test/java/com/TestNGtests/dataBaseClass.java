@@ -10,8 +10,8 @@ public class DataBaseClass {
 	
 	    private static final String base_url = "jdbc:postgresql://localhost:5432/";
 	    private static final String DB_name = "recipes_scarping";
-	    private static final String username = "root";
-	    private static final String password = "root";
+	    private static final String username = "";
+	    private static final String password = "";
 	    private Connection conn;
 
 	    public Connection connect() throws SQLException {
