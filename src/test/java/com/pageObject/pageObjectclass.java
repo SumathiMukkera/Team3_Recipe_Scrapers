@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -59,6 +60,16 @@ public class pageObjectclass {
     public WebElement cusine_category;
 	 @FindBy(xpath ="//*[@id=\"aboutrecipe\"]/p[1]") public   WebElement aboutrecipe;
 	 
+	 @FindBy (xpath="//a[@class='scroll-link' and @href='#nutrients']")
+		WebElement nutrientValue;
+
+		@FindBy (xpath = "//figure/table")
+		WebElement nutrientTable;
+
+		@FindBy (xpath = "//*[@id='methods']")
+		WebElement prepMethod;
+		 
+	 
 	 public pageObjectclass(WebDriver driver, WebDriverWait wait) {
 
 			this.driver = driver;
@@ -67,82 +78,35 @@ public class pageObjectclass {
 			PageFactory.initElements(driver, this);
 		}
 	 
-	 public List<String> getEliminateValues() throws InvalidFormatException, IOException {
-		 
-		 ExcelDataReader reader = new ExcelDataReader();
-	        configReader cofgreader = new configReader();
-	        String filepath = cofgreader.getexcelfilepath();
-	        String sheetname = cofgreader.getSheetName();
-	        
-	        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
-	         
-	        List<String> EliminateList = new ArrayList<>();
-	        
-	        for (Map<String, String> row : list) {
-		        String expectedResult = row.get("Eliminate");
-		        if (expectedResult != null) { // Avoid null values
-		        	EliminateList.add(expectedResult.trim());
-		        }
-		    }
-	        return EliminateList;
-		 
-	 }
-	 
-	 public List<String>  getAddItems() throws InvalidFormatException, IOException{
-		 
-		 
-		 ExcelDataReader reader = new ExcelDataReader();
-	        configReader cofgreader = new configReader();
-	        String filepath = cofgreader.getexcelfilepath();
-	        String sheetname = cofgreader.getSheetName();
-	        
-	        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
-	         
-	        List<String> AddList = new ArrayList<>();
-	        
-	        for (Map<String, String> row : list) {
-		        String expectedResult = row.get("Add");
-		        if (expectedResult != null) { // Avoid null values
-		        	AddList.add(expectedResult.trim());
-		        }
-		    }
-	        return AddList;
-		 
-	 }
-	 
+		 public List<String> getValuesByColumn(String columnName) throws InvalidFormatException, IOException {
+			 
+			 ExcelDataReader reader = new ExcelDataReader();
+		        configReader cofgreader = new configReader();
+		        String filepath = cofgreader.getexcelfilepath();
+		        String sheetname = cofgreader.getSheetName();
+		        
+		        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
+		         
+		        List<String> ListValues = new ArrayList<>();
+		        
+		        for (Map<String, String> row : list) {
+			        String expectedResult = row.get(columnName);
+			        if (expectedResult != null) { // Avoid null values
+			        	ListValues.add(expectedResult.trim());
+			        }
+			    }
+		        return ListValues;
+			 
+		 }
+	
 	private boolean isRecipeValid(List<String> ingredients) throws InvalidFormatException, IOException  {
 		
-		List<String> eliminateList = getEliminateValues();
+		
+		List<String> eliminateList =  getValuesByColumn("Eliminate");
 		
 		System.out.println("eliminate items :" + eliminateList);
 		
-		/*List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",
-				"bacon", "milk", "cheese", "yogurt", "butter", "ice cream", "egg", "prawn", "oil", "olive oil",
-				"coconut oil", "soybean oil", "corn oil", "safflower oil", "sunflower oil", "rapeseed oil",
-				"peanut oil", "cottonseed oil", "canola oil", "mustard oil", "cereals", "bread", "maida", "atta",
-				"sooji", "poha", "cornflake", "cornflour", "pasta", "white rice", "pastry", "cakes", "biscuit", "soy",
-				"soy milk", "white miso paste", "soy sauce", "soy curls", "edamame", "soy yogurt", "soy nut", "tofu",
-				"pies", "chip", "cracker", "potatoe", "sugar", "jaggery", "glucose", "fructose", "corn syrup",
-				"cane sugar", "aspartame", "cane solid", "maltose", "dextrose", "sorbitol", "mannitol", "xylitol",
-				"maltodextrin", "molasses", "brown rice syrup", "splenda", "nutra sweet", "stevia", "barley malt");*/
-
-	
-		
-	    
-	   
-		/*List<String> addList = Arrays.asList("lettuce", "kale", "chard", "arugula", "spinach", "cabbage", "pumpkin",
-				"sweet potatoes", "purple potatoes", "yams", "turnip", "karela", "bittergourd", "beet", "carrot",
-				"cucumber", "red onion", "white onion", "broccoli", "cauliflower", "celery", "artichoke", "bell pepper",
-				"mushroom", "tomato", "sweet and hot pepper", "banana", "mango", "papaya", "plantain", "apple",
-				"orange", "pineapple", "pear", "tangerine", "berry", "melon", "peach", "plum", "nectarine", "avocado",
-				"amaranth", "rajgira", "ramdana", "sanwa", "samvat", "buckwheat", "kuttu", "ragi", "nachni",
-				"foxtail millet", "kangni", "kakum", "kodu", "kodon", "little millet", "moraiyo", "kutki", "shavan",
-				"sama", "pearl millet", "bajra", "broom corn millet", "chena", "sorghum", "jowar", "lentil", "pulse",
-				"moong dhal", "masoor dhal", "toor dhal", "urd dhal", "lobia", "rajma", "matar", "chana", "almond",
-				"cashew", "pistachio", "brazil nut", "walnut", "pine nut", "hazelnut", "macadamia nut", "pecan",
-				"peanut", "hemp seed", "sun flower seed", "sesame seed", "chia seed", "flax seed");*/
-		
-		List<String> addList = getAddItems();
+		List<String> addList = getValuesByColumn("Add");
 		System.out.println("Add Items List : " + addList);
 		
 
@@ -268,6 +232,7 @@ public class pageObjectclass {
 
 					String cookingTime =cooking_time.getText();
 					
+								
 					
 					List<String> currentIngredients = new ArrayList<>();
 		            for (WebElement ingredient : ingredientsList) {
@@ -300,6 +265,32 @@ public class pageObjectclass {
 
 				String ingredientsName = String.join(" ", currentIngredients);
 				System.out.println("Ingredients Name : " + ingredientsName);
+				
+				//Prep_method
+				removeAds();
+				String prepMethodTxt = prepMethod.getText();
+				System.out.println("Preparation Method : " +prepMethodTxt);
+
+				//Nutrient Values
+				removeAds();
+				clickUsingJavascriptExecutor(nutrientValue);
+
+				String nutValues = "";
+				try {
+					if (nutrientTable.isDisplayed()) {
+						nutValues = nutrientTable.getText();
+					}
+				}
+				catch (NoSuchElementException ex){
+					nutValues = "Nutrient values are not listed";
+				}
+				System.out.println("Nutrient Values: " + nutValues);
+				
+				//Recipe_URL
+				removeAds();
+				String recipeURL = driver.getCurrentUrl();
+				System.out.println("Recipe URL  :" + recipeURL);
+
 
 				String foodCategory = "Vegetarian";// by default food category is vegetarian
 				String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
@@ -320,7 +311,7 @@ public class pageObjectclass {
 				// logger.info("Food Category : " + foodCategory );
 				System.out.println("Food Category : " + foodCategory);
 				
-				 String recipeDescription = aboutrecipe.getText();
+				String recipeDescription = aboutrecipe.getText().replace("\n", "");
 			        System.out.println("Recipe Description: "  +recipeDescription);
 				
 				String cusineCategory = cusine_category.getText();  
@@ -357,9 +348,9 @@ public class pageObjectclass {
 				recipe.setNumOfServings(noOfServing);
 				recipe.setCuisineCategory(cusineCategory);
 				recipe.setRecipeDescription("Recipe_Description");
-				recipe.setPreparationMethod("Preparation_method");
-				recipe.setNutritionValues("Nutrient_Values");
-				recipe.setRecipeUrl("Recipe_URL");
+				recipe.setPreparationMethod(prepMethodTxt);
+				recipe.setNutritionValues(nutValues);
+				recipe.setRecipeUrl(recipeURL);
 				
 				// Add to list
 				allRecipesList.add(recipe);
@@ -370,7 +361,7 @@ public class pageObjectclass {
 				driver.switchTo().window(mainWindow);
 
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				System.out.println("Exception: " + e.getMessage());
 			}
 		}
 
@@ -385,6 +376,10 @@ public class pageObjectclass {
 		}
 	}
 	
+	public void clickUsingJavascriptExecutor(WebElement element) {
+		JavascriptExecutor ex = (JavascriptExecutor)driver;
+		ex.executeScript("arguments[0].click();", element);
+	}
 
 
 }
