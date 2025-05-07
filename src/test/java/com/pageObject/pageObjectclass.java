@@ -76,54 +76,36 @@ public class pageObjectclass {
 			PageFactory.initElements(driver, this);
 		}
 	 
-	 public List<String> getEliminateValues() throws InvalidFormatException, IOException {
-		 
-		 ExcelDataReader reader = new ExcelDataReader();
-	        configReader cofgreader = new configReader();
-	        String filepath = cofgreader.getexcelfilepath();
-	        String sheetname = cofgreader.getSheetName();
-	        
-	        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
-	         
-	        List<String> EliminateList = new ArrayList<>();
-	        
-	        for (Map<String, String> row : list) {
-		        String expectedResult = row.get("Eliminate");
-		        if (expectedResult != null) { // Avoid null values
-		        	EliminateList.add(expectedResult.trim());
-		        }
-		    }
-	        return EliminateList;
-		 
-	 }
+	 public List<String> getValuesByColumn(String columnName) throws InvalidFormatException, IOException {
+			 
+			 ExcelDataReader reader = new ExcelDataReader();
+		        configReader cofgreader = new configReader();
+		        String filepath = cofgreader.getexcelfilepath();
+		        String sheetname = cofgreader.getSheetName();
+		        
+		        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
+		         
+		        List<String> ListValues = new ArrayList<>();
+		           
+		        for (Map<String, String> row : list) {
+			        String expectedResult = row.get(columnName);
+			        if (expectedResult != null) { // Avoid null values
+			        	ListValues.add(expectedResult.trim());
+			        }
+			    }
+		        return ListValues;
+			 
+		 }
 	 
-	 public List<String>  getAddItems() throws InvalidFormatException, IOException{
-		 
-		 
-		 ExcelDataReader reader = new ExcelDataReader();
-	        configReader cofgreader = new configReader();
-	        String filepath = cofgreader.getexcelfilepath();
-	        String sheetname = cofgreader.getSheetName();
-	        
-	        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
-	         
-	        List<String> AddList = new ArrayList<>();
-	        
-	        for (Map<String, String> row : list) {
-		        String expectedResult = row.get("Add");
-		        if (expectedResult != null) { // Avoid null values
-		        	AddList.add(expectedResult.trim());
-		        }
-		    }
-	        return AddList;
-		 
-	 }
-	 
+	
 	private boolean isRecipeValid(List<String> ingredients) throws InvalidFormatException, IOException  {
 		
-		List<String> eliminateList = getEliminateValues();
+		List<String> eliminateList =  getValuesByColumn("Eliminate");
 		
 		System.out.println("eliminate items :" + eliminateList);
+		
+		List<String> addList = getValuesByColumn("Add");
+		System.out.println("Add Items List : " + addList);
 		
 		/*List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",
 				"bacon", "milk", "cheese", "yogurt", "butter", "ice cream", "egg", "prawn", "oil", "olive oil",
@@ -150,9 +132,6 @@ public class pageObjectclass {
 				"moong dhal", "masoor dhal", "toor dhal", "urd dhal", "lobia", "rajma", "matar", "chana", "almond",
 				"cashew", "pistachio", "brazil nut", "walnut", "pine nut", "hazelnut", "macadamia nut", "pecan",
 				"peanut", "hemp seed", "sun flower seed", "sesame seed", "chia seed", "flax seed");*/
-		
-		List<String> addList = getAddItems();
-		System.out.println("Add Items List : " + addList);
 		
 
 		// Check for eliminate 
