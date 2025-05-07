@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class configReader {
 	
-	public static  Properties prop;
+	public static Properties prop;
 	
 	public static Properties init_prop() {
 	
@@ -30,18 +30,18 @@ public class configReader {
 	}
 	
 	// retriving url value from config file	
-	public  String getUrl() {
+	public static String getUrl() {
 		init_prop();
 		String URL = prop.getProperty("URL");
 		return URL;
 	}
 
-	public  String getexcelfilepath() {
+	public static String getexcelfilepath() {
 		init_prop();
 	  return prop.getProperty("excelFilePath");
 	}	
 	
-	public  String getSheetName() {
+	public static String getSheetName() {
 		init_prop();
 		return prop.getProperty("LFV_sheet");
 	}
