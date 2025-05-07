@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class dataBaseClass {
+public class DataBaseClass {
 	
 	    private static final String base_url = "jdbc:postgresql://localhost:5432/";
 	    private static final String DB_name = "recipes_scarping";

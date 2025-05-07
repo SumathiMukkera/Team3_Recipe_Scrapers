@@ -1,10 +1,9 @@
 package com.TestNGtests;
 
-
-
 import org.testng.annotations.Test;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
+
 import com.BaseClass.baseClass;
 import com.pageObject.pageObjectclass;
 

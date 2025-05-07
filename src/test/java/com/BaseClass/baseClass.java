@@ -9,11 +9,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
+import com.Utilities.configReader;
+
 public class baseClass {
 	
 	 protected WebDriver driver;
 	    protected WebDriverWait wait;
-
+        
 	    @BeforeClass
 	    public void setup() {
 	        ChromeOptions options = new ChromeOptions();
@@ -31,7 +33,9 @@ public class baseClass {
 
 	        driver = new ChromeDriver(options); //  Create driver with options
 	        driver.manage().window().maximize();
-	        driver.get("https://www.tarladalal.com/");
+	        configReader configreader = new configReader();
+	        driver.get(configreader.getUrl());
+	        //driver.get("https://www.tarladalal.com/");
 	        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 	    }
 
