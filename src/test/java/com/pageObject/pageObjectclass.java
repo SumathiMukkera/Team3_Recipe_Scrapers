@@ -1,26 +1,22 @@
 package com.pageObject;
 
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-
-import org.openqa.selenium.*;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.TestNGtests.dataBaseClass;
-import com.Utilities.ExcelDataReader;
-import com.Utilities.configReader;
 
 
 public class pageObjectclass {
@@ -52,21 +48,11 @@ public class pageObjectclass {
 	 @FindBy(xpath = "//div[@id=\"ingredients\"]/ul")	public List<WebElement> ingredientsList;
 	 @FindBy(xpath = "//a[contains(text(), 'Next')]")   public WebElement nextPageButton;
 	 @FindBy(xpath = "//a[@class='page-link' and text()='Next']")  public WebElement pageNextButton;
-	 @FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]") 	WebElement recipeCategory;
-
-	@FindBy(xpath = "//p[text()='You are here: ']//span[3]")
-
+	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
+	WebElement recipeCategory;
+	@FindBy(xpath = "//p[text()='You are here: ']//span[3]//a")
     public WebElement cusine_category;
 	 @FindBy(xpath ="//*[@id=\"aboutrecipe\"]/p[1]") public   WebElement aboutrecipe;
-
-	@FindBy (xpath="//a[@class='scroll-link' and @href='#nutrients']")
-	WebElement nutrientValue;
-
-	@FindBy (xpath = "//figure/table")
-	WebElement nutrientTable;
-
-	@FindBy (xpath = "//*[@id='methods']")
-	WebElement prepMethod;
 	 
 	 public pageObjectclass(WebDriver driver, WebDriverWait wait) {
 
@@ -76,56 +62,9 @@ public class pageObjectclass {
 			PageFactory.initElements(driver, this);
 		}
 	 
-	 public List<String> getEliminateValues() throws InvalidFormatException, IOException {
-		 
-		 ExcelDataReader reader = new ExcelDataReader();
-	        configReader cofgreader = new configReader();
-	        String filepath = cofgreader.getexcelfilepath();
-	        String sheetname = cofgreader.getSheetName();
-	        
-	        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
-	         
-	        List<String> EliminateList = new ArrayList<>();
-	        
-	        for (Map<String, String> row : list) {
-		        String expectedResult = row.get("Eliminate");
-		        if (expectedResult != null) { // Avoid null values
-		        	EliminateList.add(expectedResult.trim());
-		        }
-		    }
-	        return EliminateList;
-		 
-	 }
-	 
-	 public List<String>  getAddItems() throws InvalidFormatException, IOException{
-		 
-		 
-		 ExcelDataReader reader = new ExcelDataReader();
-	        configReader cofgreader = new configReader();
-	        String filepath = cofgreader.getexcelfilepath();
-	        String sheetname = cofgreader.getSheetName();
-	        
-	        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
-	         
-	        List<String> AddList = new ArrayList<>();
-	        
-	        for (Map<String, String> row : list) {
-		        String expectedResult = row.get("Add");
-		        if (expectedResult != null) { // Avoid null values
-		        	AddList.add(expectedResult.trim());
-		        }
-		    }
-	        return AddList;
-		 
-	 }
-	 
-	private boolean isRecipeValid(List<String> ingredients) throws InvalidFormatException, IOException  {
-		
-		List<String> eliminateList = getEliminateValues();
-		
-		System.out.println("eliminate items :" + eliminateList);
-		
-		/*List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",
+	 	
+	private boolean isRecipeValid(List<String> ingredients) {
+		List<String> eliminateList = Arrays.asList("pork", "meat", "poultry", "fish", "sausage", "ham", "salami",
 				"bacon", "milk", "cheese", "yogurt", "butter", "ice cream", "egg", "prawn", "oil", "olive oil",
 				"coconut oil", "soybean oil", "corn oil", "safflower oil", "sunflower oil", "rapeseed oil",
 				"peanut oil", "cottonseed oil", "canola oil", "mustard oil", "cereals", "bread", "maida", "atta",
@@ -133,13 +72,13 @@ public class pageObjectclass {
 				"soy milk", "white miso paste", "soy sauce", "soy curls", "edamame", "soy yogurt", "soy nut", "tofu",
 				"pies", "chip", "cracker", "potatoe", "sugar", "jaggery", "glucose", "fructose", "corn syrup",
 				"cane sugar", "aspartame", "cane solid", "maltose", "dextrose", "sorbitol", "mannitol", "xylitol",
-				"maltodextrin", "molasses", "brown rice syrup", "splenda", "nutra sweet", "stevia", "barley malt");*/
+				"maltodextrin", "molasses", "brown rice syrup", "splenda", "nutra sweet", "stevia", "barley malt");
 
 	
 		
 	    
 	   
-		/*List<String> addList = Arrays.asList("lettuce", "kale", "chard", "arugula", "spinach", "cabbage", "pumpkin",
+		List<String> addList = Arrays.asList("lettuce", "kale", "chard", "arugula", "spinach", "cabbage", "pumpkin",
 				"sweet potatoes", "purple potatoes", "yams", "turnip", "karela", "bittergourd", "beet", "carrot",
 				"cucumber", "red onion", "white onion", "broccoli", "cauliflower", "celery", "artichoke", "bell pepper",
 				"mushroom", "tomato", "sweet and hot pepper", "banana", "mango", "papaya", "plantain", "apple",
@@ -149,11 +88,7 @@ public class pageObjectclass {
 				"sama", "pearl millet", "bajra", "broom corn millet", "chena", "sorghum", "jowar", "lentil", "pulse",
 				"moong dhal", "masoor dhal", "toor dhal", "urd dhal", "lobia", "rajma", "matar", "chana", "almond",
 				"cashew", "pistachio", "brazil nut", "walnut", "pine nut", "hazelnut", "macadamia nut", "pecan",
-				"peanut", "hemp seed", "sun flower seed", "sesame seed", "chia seed", "flax seed");*/
-		
-		List<String> addList = getAddItems();
-		System.out.println("Add Items List : " + addList);
-		
+				"peanut", "hemp seed", "sun flower seed", "sesame seed", "chia seed", "flax seed");
 
 		// Check for eliminate 
 		for (String ing : ingredients) {
@@ -309,31 +244,6 @@ public class pageObjectclass {
 
 				String ingredientsName = String.join(" ", currentIngredients);
 				System.out.println("Ingredients Name : " + ingredientsName);
-				//Prep_method
-				removeAds();
-				String prepMethodTxt = prepMethod.getText();
-				System.out.println("Preparation Method : " +prepMethodTxt);
-
-				//Nutrient Values
-				removeAds();
-				clickUsingJavascriptExecutor(nutrientValue);
-
-				String nutValues = "";
-				try {
-					if (nutrientTable.isDisplayed()) {
-						nutValues = nutrientTable.getText();
-					}
-				}
-				catch (NoSuchElementException ex){
-					nutValues = "Nutrient values are not listed";
-				}
-				System.out.println("Nutrient Values: " + nutValues);
-
-				//Recipe_URL
-				removeAds();
-				String recipeURL = driver.getCurrentUrl();
-				System.out.println("Recipe URL  :" + recipeURL);
-
 
 				String foodCategory = "Vegetarian";// by default food category is vegetarian
 				String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
@@ -357,7 +267,7 @@ public class pageObjectclass {
 				 String recipeDescription = aboutrecipe.getText();
 			        System.out.println("Recipe Description: "  +recipeDescription);
 				
-				String cusineCategory = cusine_category.getText();  
+				String cusineCategory = cusine_category.getText();
 				System.out.println("Cuisine category : " + cusineCategory);
 
 				//  Apply your rule here
@@ -391,9 +301,9 @@ public class pageObjectclass {
 				recipe.setNumOfServings(noOfServing);
 				recipe.setCuisineCategory(cusineCategory);
 				recipe.setRecipeDescription("Recipe_Description");
-				recipe.setPreparationMethod(prepMethodTxt);
-				recipe.setNutritionValues(nutValues);
-				recipe.setRecipeUrl(recipeURL);
+				recipe.setPreparationMethod("Preparation_method");
+				recipe.setNutritionValues("Nutrient_Values");
+				recipe.setRecipeUrl("Recipe_URL");
 				
 				// Add to list
 				allRecipesList.add(recipe);
@@ -404,7 +314,7 @@ public class pageObjectclass {
 				driver.switchTo().window(mainWindow);
 
 			} catch (Exception e) {
-				System.out.println("Exception: " + e.getMessage());
+				System.out.println(e.getMessage());
 			}
 		}
 
@@ -418,13 +328,6 @@ public class pageObjectclass {
 					recipe.getFoodCategory(), recipe.getRecipeCategory() ,recipe.getTags(), recipe.getNutritionValues(), recipe.getRecipeUrl());
 		}
 	}
-	
-
-	public void clickUsingJavascriptExecutor(WebElement element) {
-		JavascriptExecutor ex = (JavascriptExecutor)driver;
-		ex.executeScript("arguments[0].click();", element);
-	}
-
 
 
 }
