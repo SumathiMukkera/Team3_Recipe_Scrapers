@@ -88,7 +88,7 @@ public class pageObjectclass {
 		        List<Map<String, String>> list = reader.getData(filepath ,sheetname );
 		         
 		        List<String> ListValues = new ArrayList<>();
-		        
+		           
 		        for (Map<String, String> row : list) {
 			        String expectedResult = row.get(columnName);
 			        if (expectedResult != null) { // Avoid null values
@@ -273,6 +273,7 @@ public class pageObjectclass {
 
 				//Nutrient Values
 				removeAds();
+				
 				clickUsingJavascriptExecutor(nutrientValue);
 
 				String nutValues = "";
