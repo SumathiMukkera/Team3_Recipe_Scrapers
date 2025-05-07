@@ -50,7 +50,7 @@ public class pageObjectclass {
 	 @FindBy(xpath = "//a[@class='page-link' and text()='Next']")  public WebElement pageNextButton;
 	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
 	WebElement recipeCategory;
-	@FindBy(xpath = "//p[text()='You are here: ']//span[3]")
+	@FindBy(xpath = "//p[text()='You are here: ']//span[3]//a")
     public WebElement cusine_category;
 	 @FindBy(xpath ="//*[@id=\"aboutrecipe\"]/p[1]") public   WebElement aboutrecipe;
 	 
@@ -268,6 +268,7 @@ public class pageObjectclass {
 			        System.out.println("Recipe Description: "  +recipeDescription);
 				
 				String cusineCategory = cusine_category.getText();
+				System.out.println("Cuisine category : " + cusineCategory);
 
 				//  Apply your rule here
 				if (isRecipeValid(currentIngredients)) {
