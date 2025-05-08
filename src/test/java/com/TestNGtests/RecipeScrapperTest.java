@@ -1,23 +1,21 @@
 package com.TestNGtests;
 
 
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
+
 import com.BaseClass.baseClass;
 import com.pageObject.pageObjectclass;
-
 
 public class RecipeScrapperTest extends baseClass { 
    
 	pageObjectclass page;
 
     @Test
-    void scrapeRecipe() throws SQLException, TimeoutException, InvalidFormatException, IOException {
+    void scrapeRecipe() throws SQLException, TimeoutException {
        
 
     	 page = new pageObjectclass(driver,wait);
@@ -29,6 +27,7 @@ public class RecipeScrapperTest extends baseClass {
 	      
 
        
+
 
 }
 }

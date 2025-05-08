@@ -35,7 +35,8 @@ public class configReader {
 		String URL = prop.getProperty("URL");
 		return URL;
 	}
-
+	
+	
 	public static String getexcelfilepath() {
 		init_prop();
 	  return prop.getProperty("excelFilePath");
