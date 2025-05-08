@@ -19,6 +19,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.TestNGtests.dataBaseClass;
 import com.Utilities.configReader;
 
+
 public class pageObjectclass {
 
 	WebDriver driver;
@@ -34,8 +35,20 @@ public class pageObjectclass {
 	public static final String LFV_TO_ELIMINATE = "pork, meat, poultry, fish, sausage, ham, salami, bacon, milk, cheese, yogurt, butter, ice cream, egg, prawn, oil, olive oil, coconut oil, soybean oil, corn oil, safflower oil, sunflower oil, rapeseed oil, peanut oil, cottonseed oil, canola oil, mustard oil, cereals, bread, maida, atta, sooji, poha, cornflake, cornflour, pasta, white rice, pastry, cakes, biscuit, soy, soy milk, white miso paste, soy sauce, soy curls, edamame, soy yogurt, soy nut, tofu, pies, chip, cracker, potatoe, sugar, jaggery, glucose, fructose, corn syrup, cane sugar, aspartame, cane solid, maltose, dextrose, sorbitol, mannitol, xylitol, maltodextrin, molasses, brown rice syrup, splenda, nutra sweet, stevia, barley malt";
 	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	List<Recipe> lfvEliminationRecipes = new ArrayList<Recipe>();
+	List<Recipe> lchfAddRecipes = new ArrayList<Recipe>();
+	List<Recipe> lchfEliminationRecipes = new ArrayList<Recipe>();
+	List<Recipe> lfvAddRecipes = new ArrayList<Recipe>();
+	List<Recipe> lfvToAddRecipes = new ArrayList<Recipe>();
+	List<Recipe> lfvToAddEliminationRecipes = new ArrayList<Recipe>();
+	List<Recipe> lfvNutAllergyEliminationRecipes=new ArrayList<Recipe>();
+	List<Recipe> lfvOtherAllergyEliminationRecipes=new ArrayList<Recipe>();
+	List<Recipe> lchfNutAllergyEliminationRecipes=new ArrayList<Recipe>();
+	List<Recipe> lchfOtherAllergyEliminationRecipes=new ArrayList<Recipe>();
+	List<Recipe> lfvOptionalRecipes=new ArrayList<Recipe>();
 	
-	String[] tableName = { "recipes", "LFVEliminatedRecipe" };
+	String[] tableName = { "recipes", "LCHFEliminatedRecipe",
+			"lchfAddRecipes","lfvEliminationRecipes","lfvAddRecipes",
+			"lfvToAddRecipes","lfvnutallergy","lfvotherallergy","lchfnutallergy","lchfotherallergy","lfvOptionalRecipes"}; 
 
 	@FindBy(xpath = "//a[text()='Recipes List']")
 	public WebElement recipes_list;
@@ -329,7 +342,6 @@ public class pageObjectclass {
 	            }
 	        }
 
-	        // Decide whether to include or exclude based on the match
 	        if (toBeNotIncluded) {
 	            if (!matchFound) {
 	                filteredRecipes.add(recipe);
