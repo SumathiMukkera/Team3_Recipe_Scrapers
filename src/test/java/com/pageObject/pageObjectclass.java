@@ -198,7 +198,7 @@ public class pageObjectclass {
 		System.out.println(lfvToAddRecipes);
 		System.out.println("******************************************************************");
 		insertRecipesIntoTable("recipes", allRecipesList);
-		insertRecipesIntoTable("LFVEliminatedRecipe", lfvEliminationRecipes);// insert method to add values to the table
+		insertRecipesIntoTable("lfvEliminationRecipes", lfvEliminationRecipes);// insert method to add values to the table
 		insertRecipesIntoTable("LCHFEliminatedRecipe", lchfEliminationRecipes);
 		insertRecipesIntoTable("lchfAddRecipes", lchfAddRecipes);
 		insertRecipesIntoTable("lfvAddRecipes", lfvAddRecipes);
@@ -209,9 +209,13 @@ public class pageObjectclass {
 	// Method to get all categories
 	public void click_on_recipes() throws  IOException {
 
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollBy(0, 100);");
-		for (int i = 0; i < 24; i++) {
-			try {
+		int i = 0;
+		int recipeCount = recipes.size();
+		System.out.println("Found recipes count: " + recipeCount);
+		do {
+		    try {
 				String mainWindow = driver.getWindowHandle(); // save main window
 
 				// Open recipe link in new tab using JS
@@ -360,12 +364,13 @@ public class pageObjectclass {
 
 				// Close recipe tab and switch back
 				driver.close();
-				driver.switchTo().window(mainWindow);
-
-			} catch (Exception e) {
-				System.out.println("Exception: " + e.getMessage());
-			} 
-		}
+		        // Switch back to main window
+		        driver.switchTo().window(mainWindow);
+		    } catch (Exception ex) {
+		        System.out.println("Error while processing recipe " + (i + 1) + ": " + ex.getMessage());
+		    }
+		    i++;
+		} while (i < recipeCount);
 
 	}
 
