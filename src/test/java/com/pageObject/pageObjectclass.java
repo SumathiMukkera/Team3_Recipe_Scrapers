@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeoutException;
 
 
@@ -39,6 +38,7 @@ public class pageObjectclass {
 	
 	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	String tableName = "recipes";
+
 	
 	 @FindBy(xpath = "//a[text()='Recipes List']")    public WebElement recipes_list;
 	 @FindBy(xpath = "//h5//a")	    public List<WebElement> recipes;
@@ -53,11 +53,9 @@ public class pageObjectclass {
 	 @FindBy(xpath = "//div[@id=\"ingredients\"]/ul")	public List<WebElement> ingredientsList;
 	 @FindBy(xpath = "//a[contains(text(), 'Next')]")   public WebElement nextPageButton;
 	 @FindBy(xpath = "//a[@class='page-link' and text()='Next']")  public WebElement pageNextButton;
-	 @FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]") 	WebElement recipeCategory;
-
-	@FindBy(xpath = "//p[text()='You are here: ']//span[3]")
-
-    public WebElement cusine_category;
+	 @FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]") 
+	 WebElement recipeCategory;
+	 @FindBy(xpath = "//p[text()='You are here: ']//span[3]//a") public WebElement cusine_category;
 	 @FindBy(xpath ="//*[@id=\"aboutrecipe\"]/p[1]") public   WebElement aboutrecipe;
 
 	@FindBy (xpath="//a[@class='scroll-link' and @href='#nutrients']")
@@ -105,7 +103,7 @@ public class pageObjectclass {
 		
 		
 
-		List<String> eliminateList =  getValuesByColumn("LFV_sheet" ," Eliminate");
+		List<String> eliminateList =  getValuesByColumn("LFV_sheet" ,"Eliminate");
 		
 		System.out.println("eliminate items :" + eliminateList);
 		
@@ -166,251 +164,257 @@ public class pageObjectclass {
 
 	
 
-	  // Method to click on recipe list
-		public void clickRecipeList() {
+	// Method to click on recipe list
+			public void clickRecipeList() {
 
-		try {
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", recipes_list);
-			wait.until(ExpectedConditions.elementToBeClickable(recipes_list));
-			recipes_list.click();
-		} catch (ElementClickInterceptedException e) {
-
-			clickRecipeList();
-
-		}
-	}
-
-	public void removeAds() {
-		try {
-			js.executeScript("const elements = document.getElementsByClassName('adsbygoogle adsbygoogle-noablate');"
-					+ "while (elements.length > 0) elements[0].remove();");
-		} catch (Exception e) {
-			System.out.println("Ads removed" + e.getMessage());
-		}
-	}
-	
-	// Method for navigation
-	public void click_on_recipes_with_pagination() throws SQLException, TimeoutException {
-		db = new dataBaseClass();
-		db.createDatabase();
- 		db.connect();
- 		db.createTable(tableName);
-		driver.get("https://www.tarladalal.com/recipes/");
-	    int totalPages = 5; // change based on site total pages
-	    for (int page = 1; page <= totalPages; page++) {
-	        System.out.println(" Scraping Page: " + page);
-           
-	        // Scrape current page recipes
-	        click_on_recipes(); // Method to get all required categories
-	        insertRecipesIntoTable("recipes", allRecipesList);
-	        // Click next page (except after last page)
-	        if (page != totalPages) {
-	            try {
-	                //nextPageButton.click();
-	            	String currentUrl = driver.getCurrentUrl();	
-	            	((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextPageButton);
-	            	Thread.sleep(500); // wait for scroll
-	            	((JavascriptExecutor) driver).executeScript("arguments[0].click();", nextPageButton);
-	            	wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentUrl)));
-	            } catch (Exception e) {
-	                System.out.println("Failed to go next page: " + e.getMessage());
-	                break;
-	            }
-	        }
-	    }
-	    insertRecipesIntoTable("recipes", allRecipesList); // insert method to add values to the table
-	}
-	
-
-	// Method to get all categories
-	public void click_on_recipes() {
-
-		// driver.get("https://www.tarladalal.com/recipes/");
-		js.executeScript("window.scrollBy(0, 100);");
-		for (int i = 0; i < 24; i++) {
 			try {
-				String mainWindow = driver.getWindowHandle(); // save main window
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", recipes_list);
+				wait.until(ExpectedConditions.elementToBeClickable(recipes_list));
+				recipes_list.click();
+			} catch (ElementClickInterceptedException e) {
 
-				// Open recipe link in new tab using JS
-				js.executeScript("window.open(arguments[0]);", recipes.get(i).getAttribute("href"));
+				clickRecipeList();
 
-				// Switch to new tab
-				for (String windowHandle : driver.getWindowHandles()) {
-					if (!windowHandle.equals(mainWindow)) {
-						driver.switchTo().window(windowHandle);
-						break;
-					}
-				}
-
-				// Wait for page to load
-				wait.until(ExpectedConditions.visibilityOf(recipeTitleElement));
-				  String recipeUrl = driver.getCurrentUrl();
-			        String[] parts = recipeUrl.split("-");
-			        String recipeId = parts[parts.length - 1].replace("r", "");
-			        System.out.println("Recipe ID: " + recipeId);
-
-			        String recipetitle = recipeTitleElement.getText();
-			        System.out.println("Recipe_Name: " + recipetitle);
-				
-					String ingredients = "Ingredients";
-		             System.out.println("Ingredients");
-					
-		            String preparationTime = preparation_time.getText();
-					System.out.println(preparationTime );
-					
-
-					String cookingTime =cooking_time.getText();
-					
-								
-					
-					List<String> currentIngredients = new ArrayList<>();
-		            for (WebElement ingredient : ingredientsList) {
-		                String ingText = ingredient.getText().toLowerCase().trim();
-		                currentIngredients.add(ingText);
-		            }
-		            
-		           			        
-			       
-			        String noOfServing = noOfServings.getText();
-
-				
-
-			        String tagloca = "";
-					for (WebElement tag : tags) {
-						// tagTexts.add(tag.getText());
-						tagloca = tagloca + " " + tag.getText();
-					}
-					System.out.println("Recipe Tag:" + tagloca);
-
-					String recipeCategory = "";
-					for (String recipeCategoryOption : RECIPE_CATEGORY_OPTIONS) {
-						if (tagloca.toLowerCase().contains(recipeCategoryOption.toLowerCase())) {
-							recipeCategory = recipeCategoryOption;
-							break;
-						}
-					}
-
-				System.out.println("Recipe Category:" + recipeCategory);
-
-				String ingredientsName = String.join(" ", currentIngredients);
-				System.out.println("Ingredients Name : " + ingredientsName);
-				
-				//Prep_method
-				removeAds();
-				String prepMethodTxt = prepMethod.getText();
-				System.out.println("Preparation Method : " +prepMethodTxt);
-
-				//Nutrient Values
-				removeAds();
-				
-				clickUsingJavascriptExecutor(nutrientValue);
-
-				String nutValues = "";
-				try {
-					if (nutrientTable.isDisplayed()) {
-						nutValues = nutrientTable.getText();
-					}
-				}
-				catch (NoSuchElementException ex){
-					nutValues = "Nutrient values are not listed";
-				}
-				System.out.println("Nutrient Values: " + nutValues);
-
-				//Recipe_URL
-				removeAds();
-				String recipeURL = driver.getCurrentUrl();
-				System.out.println("Recipe URL  :" + recipeURL);
-
-
-				String foodCategory = "Vegetarian";// by default food category is vegetarian
-				String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
-																				// filtering
-				// using streams to check if there is any match with the ingredients in
-				// arraylist and the string
-				boolean isEggetarian = !Arrays.stream(EGGETARION_ELEMINATE_OPTIONS).anyMatch(combinedText::contains);
-				boolean isVegan = !Arrays.stream(VEGAN_ELEMINATE_OPTIONS).anyMatch(combinedText::contains);
-				if (combinedText.contains("egg") && isEggetarian) {
-					foodCategory = "Eggetarian";
-				} else if (combinedText.contains("jain")) {
-					foodCategory = "Jain";
-				} else if (isVegan || combinedText.contains("vegan") || recipeUrl.contains("vegan")) {
-					foodCategory = "Vegan";
-				} else if (combinedText.contains("non-veg")) {
-					foodCategory = "Non-Veg";
-				}
-				// logger.info("Food Category : " + foodCategory );
-				System.out.println("Food Category : " + foodCategory);
-				
-				String recipeDescription = aboutrecipe.getText().replace("\n", "");
-			        System.out.println("Recipe Description: "  +recipeDescription);
-				
-				String cusineCategory = cusine_category.getText();  
-				System.out.println("Cuisine category : " + cusineCategory);
-
-				//  Apply your rule here
-				if (isRecipeValid(currentIngredients)) {
-
-					System.out.println("========= Recipe accepted: " + recipetitle + "=========");
-					System.out.println("ID: " + recipeId);
-					System.out.println("FoodCategory: " + foodCategory);
-					System.out.println("Recipe Category:" + recipeCategory);
-
-					System.out.println("Ingredients:");
-					for (String ing : currentIngredients) {
-						System.out.println("- " + ing);
-
-					}
-					System.out.println("===========================================");
-					//Here you can save recipe to Excel/DB/file etc.
-				} else {
-					System.out.println("=====Recipe rejected: " + recipetitle + "=========");
-				}
-				
-				Recipe recipe = new Recipe();
-				recipe.setRecipeID(recipeId);
-				recipe.setRecipeName(recipetitle);
-				recipe.setRecipeCategory(recipeCategory);
-				recipe.setFoodCategory(foodCategory);
-				recipe.setIngredients(ingredientsName);
-				recipe.setPreperationTime(preparationTime);
-				recipe.setCookingTime(cookingTime);
-				recipe.setTags(tagloca);
-				recipe.setNumOfServings(noOfServing);
-				recipe.setCuisineCategory(cusineCategory);
-				recipe.setRecipeDescription("Recipe_Description");
-				recipe.setPreparationMethod(prepMethodTxt);
-				recipe.setNutritionValues(nutValues);
-				recipe.setRecipeUrl(recipeURL);
-				
-				// Add to list
-				allRecipesList.add(recipe);
-
-
-				// Close recipe tab and switch back				
-				driver.close();
-				driver.switchTo().window(mainWindow);
-
-			} catch (Exception e) {
-				System.out.println("Exception: " + e.getMessage());
 			}
 		}
 
-	}
+			public void removeAds() {
+				try {
+					js.executeScript("const elements = document.getElementsByClassName('adsbygoogle adsbygoogle-noablate');"
+							+ "while (elements.length > 0) elements[0].remove();");
+				} catch (Exception e) {
+					System.out.println("Ads removed" + e.getMessage());
+				}
+			}
 	
-	public void insertRecipesIntoTable(String tableName, List<Recipe> recipes) throws SQLException {
-		for (Recipe recipe : recipes) {
-			db.insertData(tableName, recipe.getRecipeID(), recipe.getRecipeName(), recipe.getRecipeDescription(),
-					recipe.getIngredients(), recipe.getPreperationTime(), recipe.getCookingTime(),
-					recipe.getPreparationMethod(), recipe.getNumOfServings(), recipe.getCuisineCategory(),
-					recipe.getFoodCategory(), recipe.getRecipeCategory() ,recipe.getTags(), recipe.getNutritionValues(), recipe.getRecipeUrl());
+			// Method for navigation
+			public void click_on_recipes_with_pagination() throws SQLException, TimeoutException {
+				db = new dataBaseClass();
+				db.createDatabase();
+		 		db.connect();
+		 		db.createTable(tableName);
+				driver.get("https://www.tarladalal.com/recipes/");
+			    int totalPages = 5; // change based on site total pages
+			    for (int page = 1; page <= totalPages; page++) {
+			        System.out.println(" Scraping Page: " + page);
+		           
+			        // Scrape current page recipes
+			        click_on_recipes(); // Method to get all required categories
+			        
+	                // insertRecipesIntoTable("recipes", allRecipesList);
+			        
+			        // Click next page (except after last page)
+			        if (page != totalPages) {
+			            try {
+			                //nextPageButton.click();
+			            	String currentUrl = driver.getCurrentUrl();	
+			            	((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextPageButton);
+			            	Thread.sleep(500); // wait for scroll
+			            	((JavascriptExecutor) driver).executeScript("arguments[0].click();", nextPageButton);
+			            	wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentUrl)));
+			            } catch (Exception e) {
+			                System.out.println("Failed to go next page: " + e.getMessage());
+			                break;
+			            }
+			        }
+			    }
+			    insertRecipesIntoTable("recipes", allRecipesList); // insert method to add values to the table
+			}
+			
+	
+
+			// Method to get all categories
+			public void click_on_recipes() {
+
+				// driver.get("https://www.tarladalal.com/recipes/");
+				js.executeScript("window.scrollBy(0, 100);");
+				for (int i = 0; i < 24; i++) {
+					try {
+						String mainWindow = driver.getWindowHandle(); // save main window
+
+						// Open recipe link in new tab using JS
+						js.executeScript("window.open(arguments[0]);", recipes.get(i).getAttribute("href"));
+
+						// Switch to new tab
+						for (String windowHandle : driver.getWindowHandles()) {
+							if (!windowHandle.equals(mainWindow)) {
+								driver.switchTo().window(windowHandle);
+								break;
+							}
+						}
+						
+						// Wait for page to load
+						wait.until(ExpectedConditions.visibilityOf(recipeTitleElement));
+						  String recipeUrl = driver.getCurrentUrl();
+					        String[] parts = recipeUrl.split("-");
+					        String recipeId = parts[parts.length - 1].replace("r", "");
+					        System.out.println("Recipe ID: " + recipeId);
+
+					        String recipetitle = recipeTitleElement.getText();
+					        System.out.println("Recipe_Name: " + recipetitle);
+						
+							String ingredients = "Ingredients";
+				             System.out.println("Ingredients");
+							
+				            String preparationTime = preparation_time.getText();
+							System.out.println(preparationTime );
+							
+
+							String cookingTime =cooking_time.getText();
+								
+					
+							List<String> currentIngredients = new ArrayList<>();
+				            for (WebElement ingredient : ingredientsList) {
+				                String ingText = ingredient.getText().toLowerCase().trim();
+				                currentIngredients.add(ingText);
+				            }
+				            
+				           			        
+					       
+					        String noOfServing = noOfServings.getText();
+
+						
+
+					        String tagloca = "";
+							for (WebElement tag : tags) {
+								// tagTexts.add(tag.getText());
+								tagloca = tagloca + " " + tag.getText();
+							}
+							System.out.println("Recipe Tag:" + tagloca);
+
+							String recipeCategory = "";
+							for (String recipeCategoryOption : RECIPE_CATEGORY_OPTIONS) {
+								if (tagloca.toLowerCase().contains(recipeCategoryOption.toLowerCase())) {
+									recipeCategory = recipeCategoryOption;
+									break;
+								}
+							}
+							System.out.println("Recipe Category:" + recipeCategory);
+
+							String ingredientsName = String.join(" ", currentIngredients);
+							System.out.println("Ingredients Name : " + ingredientsName);
+							//Prep_method
+							removeAds();
+							String prepMethodTxt = prepMethod.getText();
+							System.out.println("Preparation Method : " +prepMethodTxt);
+
+							//Nutrient Values
+							removeAds();
+							clickUsingJavascriptExecutor(nutrientValue);
+
+							String nutValues = "";
+							try {
+								if (nutrientTable.isDisplayed()) {
+									nutValues = nutrientTable.getText();
+								}
+							}
+							catch (NoSuchElementException ex){
+								nutValues = "Nutrient values are not listed";
+							}
+							System.out.println("Nutrient Values: " + nutValues);
+
+							//Recipe_URL
+							removeAds();
+							String recipeURL = driver.getCurrentUrl();
+							System.out.println("Recipe URL  :" + recipeURL);
+
+							String foodCategory = "Vegetarian";// by default food category is vegetarian
+							String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
+																							// filtering
+							// using streams to check if there is any match with the ingredients in
+							// arraylist and the string
+							boolean isEggetarian = !Arrays.stream(EGGETARION_ELEMINATE_OPTIONS).anyMatch(combinedText::contains);
+							boolean isVegan = !Arrays.stream(VEGAN_ELEMINATE_OPTIONS).anyMatch(combinedText::contains);
+							if (combinedText.contains("egg") && isEggetarian) {
+								foodCategory = "Eggetarian";
+							} else if (combinedText.contains("jain")) {
+								foodCategory = "Jain";
+							} else if (isVegan || combinedText.contains("vegan") || recipeUrl.contains("vegan")) {
+								foodCategory = "Vegan";
+							} else if (combinedText.contains("non-veg")) {
+								foodCategory = "Non-Veg";
+							}
+							// logger.info("Food Category : " + foodCategory );
+							System.out.println("Food Category : " + foodCategory);
+							
+							 String recipeDescription = aboutrecipe.getText();
+						        System.out.println("Recipe Description: "  +recipeDescription);
+						        
+				//cuisine category 
+			        String cusineCategory =" " ;
+			        try {
+			        	if(cusine_category.isDisplayed()) {
+			             cusineCategory = cusine_category.getText();
+			        	}
+			        } catch (NoSuchElementException e) {
+			        	cusineCategory = "Cuisine category element not found. Continuing...";
+			        }
+			        System.out.println("Cuisine category : " + cusineCategory);
+			        
+			    //  Apply your rule here
+					if (isRecipeValid(currentIngredients)) {
+
+						System.out.println("========= Recipe accepted: " + recipetitle + "=========");
+						System.out.println("ID: " + recipeId);
+						System.out.println("FoodCategory: " + foodCategory);
+						System.out.println("Recipe Category:" + recipeCategory);
+
+						System.out.println("Ingredients:");
+						for (String ing : currentIngredients) {
+							System.out.println("- " + ing);
+
+						}
+						System.out.println("===========================================");
+						//Here you can save recipe to Excel/DB/file etc.
+					} else {
+						System.out.println("=====Recipe rejected: " + recipetitle + "=========");
+					}
+				
+					Recipe recipe = new Recipe();
+					recipe.setRecipeID(recipeId);
+					recipe.setRecipeName(recipetitle);
+					recipe.setRecipeCategory(recipeCategory);
+					recipe.setFoodCategory(foodCategory);
+					recipe.setIngredients(ingredientsName);
+					recipe.setPreperationTime(preparationTime);
+					recipe.setCookingTime(cookingTime);
+					recipe.setTags(tagloca);
+					recipe.setNumOfServings(noOfServing);
+					recipe.setCuisineCategory(cusineCategory);
+					recipe.setRecipeDescription(recipeDescription);
+					recipe.setPreparationMethod(prepMethodTxt);
+					//recipe.setNutritionValues(nutValues);
+					recipe.setRecipeUrl(recipeURL);
+					// Add to list
+					allRecipesList.add(recipe);
+
+
+					// Close recipe tab and switch back				
+					driver.close();
+					driver.switchTo().window(mainWindow);
+
+				} catch (Exception e) {
+					System.out.println("Exception: " + e.getMessage());
+				}
+			}
+
 		}
-	}
 	
-	public void clickUsingJavascriptExecutor(WebElement element) {
-		JavascriptExecutor ex = (JavascriptExecutor)driver;
-		ex.executeScript("arguments[0].click();", element);
-	}
+			public void insertRecipesIntoTable(String tableName, List<Recipe> recipes) throws SQLException {
+				for (Recipe recipe : recipes) {
+					db.insertData(tableName, recipe.getRecipeID(), recipe.getRecipeName(), recipe.getRecipeDescription(),
+							recipe.getIngredients(), recipe.getPreperationTime(), recipe.getCookingTime(),
+							recipe.getPreparationMethod(), recipe.getNumOfServings(), recipe.getCuisineCategory(),
+							recipe.getFoodCategory(), recipe.getRecipeCategory() ,recipe.getTags(), recipe.getNutritionValues(), recipe.getRecipeUrl());
+				}
+			}
+
+	
+			public void clickUsingJavascriptExecutor(WebElement element) {
+				JavascriptExecutor ex = (JavascriptExecutor)driver;
+				ex.executeScript("arguments[0].click();", element);
+			}
 
 
 
-}
+		}
