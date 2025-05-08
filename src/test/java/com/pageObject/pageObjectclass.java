@@ -1,16 +1,14 @@
 package com.pageObject;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -36,6 +34,7 @@ public class pageObjectclass {
 	public static final String LFV_TO_ELIMINATE = "pork, meat, poultry, fish, sausage, ham, salami, bacon, milk, cheese, yogurt, butter, ice cream, egg, prawn, oil, olive oil, coconut oil, soybean oil, corn oil, safflower oil, sunflower oil, rapeseed oil, peanut oil, cottonseed oil, canola oil, mustard oil, cereals, bread, maida, atta, sooji, poha, cornflake, cornflour, pasta, white rice, pastry, cakes, biscuit, soy, soy milk, white miso paste, soy sauce, soy curls, edamame, soy yogurt, soy nut, tofu, pies, chip, cracker, potatoe, sugar, jaggery, glucose, fructose, corn syrup, cane sugar, aspartame, cane solid, maltose, dextrose, sorbitol, mannitol, xylitol, maltodextrin, molasses, brown rice syrup, splenda, nutra sweet, stevia, barley malt";
 	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	List<Recipe> lfvEliminationRecipes = new ArrayList<Recipe>();
+	
 	String[] tableName = { "recipes", "LFVEliminatedRecipe" };
 
 	@FindBy(xpath = "//a[text()='Recipes List']")
@@ -119,7 +118,7 @@ public class pageObjectclass {
 			db.createTable(tableName);
 		}
 		driver.get("https://www.tarladalal.com/recipes/");
-		int totalPages = 2; // change based on site total pages
+	    int totalPages = 2; // change based on site total pages
 		for (int page = 1; page <= totalPages; page++) {
 			System.out.println(" Scraping Page: " + page);
 
@@ -142,7 +141,7 @@ public class pageObjectclass {
 			}
 		}
 		lfvEliminationRecipes = filterRecipes(allRecipesList, LFV_TO_ELIMINATE, true);
-
+		
 		System.out.println("******************************************************************");
 		System.out.println(lfvEliminationRecipes);
 		System.out.println("******************************************************************");
@@ -224,14 +223,21 @@ public class pageObjectclass {
 				System.out.println("Preparation Method : " + prepMethodTxt);
 
 				// Nutrient Values
-				/*
-				 * removeAds(); clickUsingJavascriptExecutor(nutrientValue);
-				 * 
-				 * String nutValues = ""; try { if (nutrientTable.isDisplayed()) { nutValues =
-				 * nutrientTable.getText(); } } catch (NoSuchElementException ex){ nutValues =
-				 * "Nutrient values are not listed"; } System.out.println("Nutrient Values: " +
-				 * nutValues);
-				 */
+				
+				removeAds();
+				clickUsingJavascriptExecutor(nutrientValue);
+
+				String nutValues = "";
+				try {
+					if (nutrientTable.isDisplayed()) {
+						nutValues = nutrientTable.getText();
+					}
+				}
+				catch (NoSuchElementException ex){
+					nutValues = "Nutrient values are not listed";
+				}
+				System.out.println("Nutrient Values: " + nutValues);
+				 
 
 				// Recipe_URL
 				removeAds();
