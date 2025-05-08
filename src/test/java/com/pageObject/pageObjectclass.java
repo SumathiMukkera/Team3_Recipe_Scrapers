@@ -1,22 +1,34 @@
 package com.pageObject;
 
+
+import java.io.IOException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.openqa.selenium.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.TestNGtests.dataBaseClass;
+import com.Utilities.ExcelDataReader;
 import com.Utilities.configReader;
 
 
@@ -27,11 +39,14 @@ public class pageObjectclass {
 	private JavascriptExecutor js;
 	dataBaseClass db;
 	static configReader cofgreader;
+
 	public static String[] EGGETARION_ELEMINATE_OPTIONS = new String[] { "veggie", "eggplant", "without egg",
 			"eggless" };
 	public static String[] VEGAN_ELEMINATE_OPTIONS = new String[] { "egg", "milk", "honey", "butter", "cheese", "ghee",
 			"gelatin", "mayonnaise", "cream", "whey", "casein", "paneer" };
 	public static final String[] RECIPE_CATEGORY_OPTIONS = { "breakfast", "lunch", "snack", "dinner" };
+
+
 	public static final String LFV_TO_ELIMINATE = "pork, meat, poultry, fish, sausage, ham, salami, bacon, milk, cheese, yogurt, butter, ice cream, egg, prawn, oil, olive oil, coconut oil, soybean oil, corn oil, safflower oil, sunflower oil, rapeseed oil, peanut oil, cottonseed oil, canola oil, mustard oil, cereals, bread, maida, atta, sooji, poha, cornflake, cornflour, pasta, white rice, pastry, cakes, biscuit, soy, soy milk, white miso paste, soy sauce, soy curls, edamame, soy yogurt, soy nut, tofu, pies, chip, cracker, potatoe, sugar, jaggery, glucose, fructose, corn syrup, cane sugar, aspartame, cane solid, maltose, dextrose, sorbitol, mannitol, xylitol, maltodextrin, molasses, brown rice syrup, splenda, nutra sweet, stevia, barley malt";
 	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	List<Recipe> lfvEliminationRecipes = new ArrayList<Recipe>();
@@ -46,7 +61,7 @@ public class pageObjectclass {
 	List<Recipe> lchfOtherAllergyEliminationRecipes=new ArrayList<Recipe>();
 	List<Recipe> lfvOptionalRecipes=new ArrayList<Recipe>();
 	
-	String[] tableName = { "recipes", "LCHFEliminatedRecipe",
+	String[] tableNames = { "recipes", "LCHFEliminatedRecipe",
 			"lchfAddRecipes","lfvEliminationRecipes","lfvAddRecipes",
 			"lfvToAddRecipes","lfvnutallergy","lfvotherallergy","lchfnutallergy","lchfotherallergy","lfvOptionalRecipes"}; 
 
@@ -97,8 +112,7 @@ public class pageObjectclass {
 		this.wait = wait;
 		this.js = (JavascriptExecutor) driver;
 		PageFactory.initElements(driver, this);
-	}
-
+  }
 	// Method to click on recipe list
 	public void clickRecipeList() {
 
@@ -122,52 +136,56 @@ public class pageObjectclass {
 		}
 	}
 
+
+	public boolean navigateToNextPage() {
+		try {
+			if (pageNextButton.isDisplayed() && pageNextButton.isEnabled()) {
+				clickUsingJavascriptExecutor(pageNextButton);
+				return true;
+			}
+		} catch (Exception e) {
+			System.out.println("Next page not available or failed to navigate: " + e.getMessage());
+		}
+		return false;
+	}
+
+
 	// Method for navigation
-	public void click_on_recipes_with_pagination() throws SQLException, TimeoutException {
+	public void click_on_recipes_with_pagination()
+			throws SQLException, TimeoutException, IOException {
 		db = new dataBaseClass();
 		db.createDatabase();
 		db.connect();
-		for (String tableName : tableName) {
+		for (String tableName : tableNames) {
 			db.createTable(tableName);
 		}
-		driver.get("https://www.tarladalal.com/recipes/");
-	    int totalPages = 2; // change based on site total pages
-		for (int page = 1; page <= totalPages; page++) {
-			System.out.println(" Scraping Page: " + page);
+  driver.get("https://www.tarladalal.com/recipes/");
+	boolean hasNextPage;
+		int page = 1;
 
-			// Scrape current page recipes // Method to get all required categories
-			click_on_recipes(); 
-			
-			// Click next page (except after last page)
-			if (page != totalPages) {
-				try {
-					// nextPageButton.click();
-					String currentUrl = driver.getCurrentUrl();
-					((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextPageButton);
-					Thread.sleep(500); // wait for scroll
-					((JavascriptExecutor) driver).executeScript("arguments[0].click();", nextPageButton);
-					wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentUrl)));
-				} catch (Exception e) {
-					System.out.println("Failed to go next page: " + e.getMessage());
-					break;
-				}
-			}
-		}
+		do {
+			System.out.println("Scraping Page: " + page);
+
+			click_on_recipes(); // Scrape current page recipes
+
+			hasNextPage = navigateToNextPage(); // Try moving to next page
+			page++;
+
+		} while (hasNextPage);
+		insertRecipesIntoTable("recipes", allRecipesList);
+		insertRecipesIntoTable("LFVEliminatedRecipe", lfvEliminationRecipes);// insert method to add values to the table
+	
 		lfvEliminationRecipes = filterRecipes(allRecipesList, LFV_TO_ELIMINATE, true);
 		
 		System.out.println("******************************************************************");
 		System.out.println(lfvEliminationRecipes);
 		System.out.println("******************************************************************");
 		
-		// Inserting into tables
-		insertRecipesIntoTable("recipes", allRecipesList);
-
-		insertRecipesIntoTable("LFVEliminatedRecipe", lfvEliminationRecipes);
-
 	}
 
+
 	// Method to get all categories
-	public void click_on_recipes() {
+	public void click_on_recipes() throws  IOException {
 
 		js.executeScript("window.scrollBy(0, 100);");
 		for (int i = 0; i < 24; i++) {
@@ -192,15 +210,37 @@ public class pageObjectclass {
 				String recipeId = parts[parts.length - 1].replace("r", "");
 				System.out.println("Recipe ID: " + recipeId);
 
-				String recipetitle = recipeTitleElement.getText();
-				System.out.println("Recipe_Name: " + recipetitle);
-
+								String recipetitle = "";
+				try {
+					if (recipeTitleElement.isDisplayed()) {
+						recipetitle = recipeTitleElement.getText();
+					}
+				} catch (NoSuchElementException ex) {
+					recipetitle = "recipetitle are not listed";
+				}
+				System.out.println("recipetitle: " + recipetitle);
+				
+				
+				
 				String preparationTime = preparation_time.getText();
 				System.out.println(preparationTime);
-
+				
 				String cookingTime = cooking_time.getText();
-
-				String recipeDescription = aboutrecipe.getText().replace("\n", "");
+				String recipeDescription = "";
+				try {
+					if (nutrientTable.isDisplayed()) {
+						recipeDescription = aboutrecipe.getText().replace("\n", "");
+					}
+				} catch (NoSuchElementException ex) {
+					recipeDescription = "Recipe Descriptionare not listed";
+				}
+				System.out.println("RecipeDescription: " + recipeDescription);
+				
+				List<String> currentIngredients = new ArrayList<>();
+				for (WebElement ingredient : ingredientsList) {
+					String ingText = ingredient.getText().toLowerCase().trim();
+					currentIngredients.add(ingText);
+				}
 
 				String noOfServing = noOfServings.getText();
 
@@ -221,13 +261,6 @@ public class pageObjectclass {
 
 				System.out.println("Recipe Category:" + recipeCategory);
 
-				// Collect ingredients
-				List<String> currentIngredients = new ArrayList<>();
-
-				for (WebElement ingredient : ingredientsList) {
-					String ingText = ingredient.getText().toLowerCase().trim();
-					currentIngredients.add(ingText);
-				}
 				String ingredientsName = String.join(" ", currentIngredients);
 				System.out.println("Ingredients Name : " + ingredientsName);
 				// Prep_method
@@ -236,7 +269,6 @@ public class pageObjectclass {
 				System.out.println("Preparation Method : " + prepMethodTxt);
 
 				// Nutrient Values
-				
 				removeAds();
 				clickUsingJavascriptExecutor(nutrientValue);
 
@@ -245,12 +277,10 @@ public class pageObjectclass {
 					if (nutrientTable.isDisplayed()) {
 						nutValues = nutrientTable.getText();
 					}
-				}
-				catch (NoSuchElementException ex){
+				} catch (NoSuchElementException ex) {
 					nutValues = "Nutrient values are not listed";
 				}
 				System.out.println("Nutrient Values: " + nutValues);
-				 
 
 				// Recipe_URL
 				removeAds();
@@ -259,7 +289,7 @@ public class pageObjectclass {
 
 				String foodCategory = "Vegetarian";// by default food category is vegetarian
 				String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
-				// filtering
+																				// filtering
 				// using streams to check if there is any match with the ingredients in
 				// arraylist and the string
 				boolean isEggetarian = !Arrays.stream(EGGETARION_ELEMINATE_OPTIONS).anyMatch(combinedText::contains);
@@ -275,12 +305,21 @@ public class pageObjectclass {
 				}
 				// logger.info("Food Category : " + foodCategory );
 				System.out.println("Food Category : " + foodCategory);
-
 				System.out.println("Recipe Description: " + recipeDescription);
+				// String cusineCategory = cusine_category.getText();
 
-				String cusineCategory = cusine_category.getText();
+				String cusineCategory = "";
+				try {
+					if (cusine_category.isDisplayed()) {
+						cusineCategory = cusine_category.getText();
+					}
+				} catch (NoSuchElementException ex) {
+					cusineCategory = "cusinecategory are not listed";
+				}
+				System.out.println("Cusine Category: " + cusineCategory);
 
 				
+
 				Recipe recipe = new Recipe();
 				recipe.setRecipeID(recipeId);
 				recipe.setRecipeName(recipetitle);
@@ -305,7 +344,7 @@ public class pageObjectclass {
 
 			} catch (Exception e) {
 				System.out.println("Exception: " + e.getMessage());
-			}
+			} 
 		}
 
 	}
@@ -354,7 +393,25 @@ public class pageObjectclass {
 	    }
 
 	    return filteredRecipes;
-	}
 
+	}
+	public List<String> getListFromExcel(String listName, String sheetname)
+			throws org.apache.poi.openxml4j.exceptions.InvalidFormatException, IOException {
+		ExcelDataReader reader = new ExcelDataReader();
+		cofgreader = new configReader();
+		String filepath = configReader.getexcelfilepath();
+		sheetname = cofgreader.getSheetName();
+
+		List<Map<String, String>> list = reader.getData(filepath, sheetname);
+
+		List<String> listWithValues = new ArrayList<>();
+
+		for (Map<String, String> row : list) {
+			String expectedResult = row.get(listName);
+			if (expectedResult != null) { // Avoid null values
+				listWithValues.add(expectedResult.trim());
+			}
+		}
+		return listWithValues;
 		
-}
+}}
