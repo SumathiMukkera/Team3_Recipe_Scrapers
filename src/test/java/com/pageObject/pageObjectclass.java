@@ -32,6 +32,7 @@ import com.Utilities.ExcelDataReader;
 import com.Utilities.configReader;
 
 
+
 public class pageObjectclass {
 
 	WebDriver driver;
@@ -48,22 +49,27 @@ public class pageObjectclass {
 
 
 	public static final String LFV_TO_ELIMINATE = "pork, meat, poultry, fish, sausage, ham, salami, bacon, milk, cheese, yogurt, butter, ice cream, egg, prawn, oil, olive oil, coconut oil, soybean oil, corn oil, safflower oil, sunflower oil, rapeseed oil, peanut oil, cottonseed oil, canola oil, mustard oil, cereals, bread, maida, atta, sooji, poha, cornflake, cornflour, pasta, white rice, pastry, cakes, biscuit, soy, soy milk, white miso paste, soy sauce, soy curls, edamame, soy yogurt, soy nut, tofu, pies, chip, cracker, potatoe, sugar, jaggery, glucose, fructose, corn syrup, cane sugar, aspartame, cane solid, maltose, dextrose, sorbitol, mannitol, xylitol, maltodextrin, molasses, brown rice syrup, splenda, nutra sweet, stevia, barley malt";
-	List<Recipe> allRecipesList = new ArrayList<Recipe>();
+	  public static final String LCHF_TO_ELIMINATE = "Ham,sausage,tinned fish,tuna,sardines,yams,beets,parsnip,turnip,"
+	  		+ "rutabagas,carrot,yuca,kohlrabi,celery root,horseradish,daikon,jicama,radish,pumpkin,squash,Whole fat milk,"
+	  		+ "low fat milk,fat free milk,Evaporated milk,condensed milk,curd,buttermilk,ice cream,flavored milk,"
+	  		+ "sweetened yogurt,soft cheese,grain,Wheat,oat,barely,rice,millet,jowar,bajra,corn,dal,lentil,banana,mango,papaya,plantain,"
+	  		+ "apple,orange,pineapple,pear,tangerine,all melon varieties,peach,plum,nectarine,Avocado,olive oil,coconut oil,soybean oil,"
+	  		+ "corn oil,safflower oil,sunflower oil,rapeseed oil,peanut oil,cottonseed oil,canola oil,mustard oil,sugar,jaggery,glucose,"
+	  		+ "fructose,corn syrup,cane sugar,aspartame,cane solids,maltose,dextrose,"
+	  		+ "sorbitol,mannitol,xylitol,maltodextrin,molasses,brown rice syrup,splenda,nutra sweet,stevia,barley malt,potato,corn,pea";
+	  public static final String LCHF_ADD = "Fish,prawn,poultry,egg,Onion,Garlic,turmeric,Ginger,Butter,ghee,hard cheese,paneer,cottage cheese,sour cream,greek yogurt,hung curd,almond,pistachio,brazil nut,walnut,pine nut,hazelnut,macadamia nut,pecan,hemp seed,sunflower seed,sesame seed,chia seed,flax seed,Blueberry,blackberry,strawberry";
+	    public static final String LFV_ADD = "Lettuce,kale,chard,arugula,spinach,cabbage,pumpkin,sweet potatoes,purple potatoes,yams,turnip,parsnip,karela,bittergourd,beet,carrot,cucumber,red onion,white onion,broccoli,cauliflower,carrot,celery,artichoke,bell pepper,mushroom,tomato,sweet and hot pepper,banana,mango,papaya,plantain,apple,orange,pineapple,pear,tangerine,all berry varieties,all melon varieties,peach,plum,nectarine,Avocado,Amaranth,Rajgira,Ramdana Barnyard,Sanwa,Samvat ke chawal buckwheat,kuttu finger millet,Ragi,Nachni foxtail millet,kangni,kakum kodu,kodon,little millet,moraiyo,kutki,shavan,sama pearl millet,bajra,broom corn millet,chena sorghum,jowar,Lentil,Pulse,Moong dhal,masoor dhal,toor dhal,urd dhal,lobia,rajma,matar,all forms of chana,almond,cashew,pistachio,brazil nut,walnut,pine nut,hazelnut,macadamia nut,pecan,peanut,hemp seed,sun flower seed,sesame seed,chia seed,flax seed";
+	    public static final String LFV_TO_ADD = "Butter,Ghee,salmon,mackerel,sardines";
+	    List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	List<Recipe> lfvEliminationRecipes = new ArrayList<Recipe>();
 	List<Recipe> lchfAddRecipes = new ArrayList<Recipe>();
 	List<Recipe> lchfEliminationRecipes = new ArrayList<Recipe>();
 	List<Recipe> lfvAddRecipes = new ArrayList<Recipe>();
 	List<Recipe> lfvToAddRecipes = new ArrayList<Recipe>();
-	List<Recipe> lfvToAddEliminationRecipes = new ArrayList<Recipe>();
-	List<Recipe> lfvNutAllergyEliminationRecipes=new ArrayList<Recipe>();
-	List<Recipe> lfvOtherAllergyEliminationRecipes=new ArrayList<Recipe>();
-	List<Recipe> lchfNutAllergyEliminationRecipes=new ArrayList<Recipe>();
-	List<Recipe> lchfOtherAllergyEliminationRecipes=new ArrayList<Recipe>();
-	List<Recipe> lfvOptionalRecipes=new ArrayList<Recipe>();
+	//List<Recipe> lfvToAvoidRecipes  = new ArrayList<Recipe>();
 	
-	String[] tableNames = { "recipes", "LCHFEliminatedRecipe",
-			"lchfAddRecipes","lfvEliminationRecipes","lfvAddRecipes",
-			"lfvToAddRecipes","lfvnutallergy","lfvotherallergy","lchfnutallergy","lchfotherallergy","lfvOptionalRecipes"}; 
+	
+	String[] tableNames = { "recipes", "LCHFEliminatedRecipe","lchfAddRecipes","lfvEliminationRecipes","lfvAddRecipes","lfvToAddRecipes"}; 
 
 	@FindBy(xpath = "//a[text()='Recipes List']")
 	public WebElement recipes_list;
@@ -172,15 +178,31 @@ public class pageObjectclass {
 			page++;
 
 		} while (hasNextPage);
-		insertRecipesIntoTable("recipes", allRecipesList);
-		insertRecipesIntoTable("LFVEliminatedRecipe", lfvEliminationRecipes);// insert method to add values to the table
-	
-		lfvEliminationRecipes = filterRecipes(allRecipesList, LFV_TO_ELIMINATE, true);
 		
+		lchfEliminationRecipes = filterRecipes(allRecipesList,LCHF_TO_ELIMINATE, true);					
+		lchfAddRecipes = filterRecipes(lchfEliminationRecipes,LCHF_ADD, false);
+		//lchfToAvoid = filterRecipes(,,false);
+		lfvEliminationRecipes = filterRecipes(allRecipesList, LFV_TO_ELIMINATE, true);
+		lfvAddRecipes = filterRecipes(lfvEliminationRecipes, LFV_ADD, false);
+		lfvToAddRecipes = filterRecipes(lfvEliminationRecipes,LFV_TO_ADD, false);
+				
 		System.out.println("******************************************************************");
 		System.out.println(lfvEliminationRecipes);
 		System.out.println("******************************************************************");
-		
+		System.out.println(lchfEliminationRecipes);
+		System.out.println("******************************************************************");
+		System.out.println(lchfAddRecipes);
+		System.out.println("******************************************************************");
+		System.out.println(lfvAddRecipes);
+		System.out.println("******************************************************************");
+		System.out.println(lfvToAddRecipes);
+		System.out.println("******************************************************************");
+		insertRecipesIntoTable("recipes", allRecipesList);
+		insertRecipesIntoTable("LFVEliminatedRecipe", lfvEliminationRecipes);// insert method to add values to the table
+		insertRecipesIntoTable("LCHFEliminatedRecipe", lchfEliminationRecipes);
+		insertRecipesIntoTable("lchfAddRecipes", lchfAddRecipes);
+		insertRecipesIntoTable("lfvAddRecipes", lfvAddRecipes);
+		insertRecipesIntoTable("lfvToAddRecipes", lfvToAddRecipes);
 	}
 
 
@@ -220,12 +242,10 @@ public class pageObjectclass {
 				}
 				System.out.println("recipetitle: " + recipetitle);
 				
-				
-				
+				String cookingTime = cooking_time.getText();
 				String preparationTime = preparation_time.getText();
 				System.out.println(preparationTime);
 				
-				String cookingTime = cooking_time.getText();
 				String recipeDescription = "";
 				try {
 					if (nutrientTable.isDisplayed()) {
