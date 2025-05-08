@@ -1,8 +1,6 @@
 package com.pageObject;
 
-
 import java.io.IOException;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +9,6 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
-
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.openqa.selenium.*;
 import java.util.ArrayList;
@@ -19,8 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -37,21 +32,18 @@ public class pageObjectclass {
 	WebDriverWait wait;
 	private JavascriptExecutor js;
 	dataBaseClass db;
-	static configReader cofgreader;
-
+	configReader cofgreader;
 	public static String[] EGGETARION_ELEMINATE_OPTIONS = new String[] { "veggie", "eggplant", "without egg",
 			"eggless" };
 	public static String[] VEGAN_ELEMINATE_OPTIONS = new String[] { "egg", "milk", "honey", "butter", "cheese", "ghee",
 			"gelatin", "mayonnaise", "cream", "whey", "casein", "paneer" };
 	public static final String[] RECIPE_CATEGORY_OPTIONS = { "breakfast", "lunch", "snack", "dinner" };
-
-
 	public static final String LFV_TO_ELIMINATE = "pork, meat, poultry, fish, sausage, ham, salami, bacon, milk, cheese, yogurt, butter, ice cream, egg, prawn, oil, olive oil, coconut oil, soybean oil, corn oil, safflower oil, sunflower oil, rapeseed oil, peanut oil, cottonseed oil, canola oil, mustard oil, cereals, bread, maida, atta, sooji, poha, cornflake, cornflour, pasta, white rice, pastry, cakes, biscuit, soy, soy milk, white miso paste, soy sauce, soy curls, edamame, soy yogurt, soy nut, tofu, pies, chip, cracker, potatoe, sugar, jaggery, glucose, fructose, corn syrup, cane sugar, aspartame, cane solid, maltose, dextrose, sorbitol, mannitol, xylitol, maltodextrin, molasses, brown rice syrup, splenda, nutra sweet, stevia, barley malt";
-	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	List<Recipe> lfvEliminationRecipes = new ArrayList<Recipe>();
+	List<Recipe> allRecipesList = new ArrayList<Recipe>();
 	
-	String[] tableName = { "recipes", "LFVEliminatedRecipe" };
-
+	String[] tableNames = { "recipes", "LFVEliminatedRecipe" };
+	
 	@FindBy(xpath = "//a[text()='Recipes List']")
 	public WebElement recipes_list;
 	@FindBy(xpath = "//h5//a")
@@ -99,7 +91,9 @@ public class pageObjectclass {
 		this.wait = wait;
 		this.js = (JavascriptExecutor) driver;
 		PageFactory.initElements(driver, this);
-  }
+	}
+
+
 	// Method to click on recipe list
 	public void clickRecipeList() {
 
@@ -123,11 +117,10 @@ public class pageObjectclass {
 		}
 	}
 
-
 	public boolean navigateToNextPage() {
 		try {
-			if (pageNextButton.isDisplayed() && pageNextButton.isEnabled()) {
-				clickUsingJavascriptExecutor(pageNextButton);
+			if (nextPageButton.isDisplayed() && nextPageButton.isEnabled()) {
+				clickUsingJavascriptExecutor(nextPageButton);
 				return true;
 			}
 		} catch (Exception e) {
@@ -135,7 +128,6 @@ public class pageObjectclass {
 		}
 		return false;
 	}
-
 
 	// Method for navigation
 	public void click_on_recipes_with_pagination()
@@ -146,8 +138,8 @@ public class pageObjectclass {
 		for (String tableName : tableNames) {
 			db.createTable(tableName);
 		}
-  driver.get("https://www.tarladalal.com/recipes/");
-	boolean hasNextPage;
+		driver.get("https://www.tarladalal.com/recipes/");
+		boolean hasNextPage;
 		int page = 1;
 
 		do {
@@ -159,23 +151,24 @@ public class pageObjectclass {
 			page++;
 
 		} while (hasNextPage);
-		insertRecipesIntoTable("recipes", allRecipesList);
-		insertRecipesIntoTable("LFVEliminatedRecipe", lfvEliminationRecipes);// insert method to add values to the table
-	
-		lfvEliminationRecipes = filterRecipes(allRecipesList, LFV_TO_ELIMINATE, true);
+		
+lfvEliminationRecipes = filterRecipes(allRecipesList, LFV_TO_ELIMINATE, true);
 		
 		System.out.println("******************************************************************");
 		System.out.println(lfvEliminationRecipes);
 		System.out.println("******************************************************************");
 		
+		
+		insertRecipesIntoTable("recipes", allRecipesList);
+		insertRecipesIntoTable("LFVEliminatedRecipe", lfvEliminationRecipes);// insert method to add values to the table
 	}
-
 
 	// Method to get all categories
 	public void click_on_recipes() throws InvalidFormatException, IOException {
 
 		js.executeScript("window.scrollBy(0, 100);");
-		for (int i = 0; i < 24; i++) {
+		
+	    for (int i = 0; i < 24; i++) {
 			try {
 				String mainWindow = driver.getWindowHandle(); // save main window
 
@@ -197,13 +190,14 @@ public class pageObjectclass {
 				String recipeId = parts[parts.length - 1].replace("r", "");
 				System.out.println("Recipe ID: " + recipeId);
 
-								String recipetitle = "";
+				String recipetitle;
 				try {
-					if (recipeTitleElement.isDisplayed()) {
-						recipetitle = recipeTitleElement.getText();
-					}
-				} catch (NoSuchElementException ex) {
-					recipetitle = "recipetitle are not listed";
+				    recipetitle = (recipeTitleElement != null) ? recipeTitleElement.getText().trim() : "Recipe title element is null";
+				    if (recipetitle.isEmpty()) {
+				        recipetitle = "Recipe title is empty";
+				    }
+				} catch (Exception ex) {
+				    recipetitle = "Recipe title fetch failed: " + ex.getClass().getSimpleName();
 				}
 				System.out.println("recipetitle: " + recipetitle);
 				
@@ -211,6 +205,8 @@ public class pageObjectclass {
 				String preparationTime = preparation_time.getText();
 				System.out.println(preparationTime);
 				
+				String cookingTime = cooking_time.getText();
+
 				String recipeDescription = "";
 				try {
 					if (nutrientTable.isDisplayed()) {
@@ -302,9 +298,6 @@ public class pageObjectclass {
 					cusineCategory = "cusinecategory are not listed";
 				}
 				System.out.println("Cusine Category: " + cusineCategory);
-
-				
-
 				Recipe recipe = new Recipe();
 				recipe.setRecipeID(recipeId);
 				recipe.setRecipeName(recipetitle);
@@ -318,7 +311,7 @@ public class pageObjectclass {
 				recipe.setCuisineCategory(cusineCategory);
 				recipe.setRecipeDescription(recipeDescription);
 				recipe.setPreparationMethod(prepMethodTxt);
-				recipe.setNutritionValues("nutValues");
+				recipe.setNutritionValues(nutValues);
 				recipe.setRecipeUrl(recipeURL);
 				// Add to list
 				allRecipesList.add(recipe);
@@ -329,13 +322,11 @@ public class pageObjectclass {
 
 			} catch (Exception e) {
 				System.out.println("Exception: " + e.getMessage());
-			} finally {
-				lfvEliminationRecipes = filterRecipesByList(allRecipesList, "Eliminate", cofgreader.getSheetName(),
-						true);
-			}
+			} 
 		}
 
 	}
+
 
 	public void insertRecipesIntoTable(String tableName, List<Recipe> recipes) throws SQLException {
 		for (Recipe recipe : recipes) {
@@ -350,7 +341,7 @@ public class pageObjectclass {
 	public void clickUsingJavascriptExecutor(WebElement element) {
 		js.executeScript("arguments[0].click();", element);
 	}
-	
+
 	public List<Recipe> filterRecipes(List<Recipe> recipeList, String filterString, boolean toBeNotIncluded) {
 	    List<Recipe> filteredRecipes = new ArrayList<>();
 	    
@@ -369,7 +360,7 @@ public class pageObjectclass {
 	            }
 	        }
 
-       // Decide whether to include or exclude based on the match
+	        // Decide whether to include or exclude based on the match
 	        if (toBeNotIncluded) {
 	            if (!matchFound) {
 	                filteredRecipes.add(recipe);
@@ -382,25 +373,6 @@ public class pageObjectclass {
 	    }
 
 	    return filteredRecipes;
-
 	}
-	public List<String> getListFromExcel(String listName, String sheetname)
-			throws org.apache.poi.openxml4j.exceptions.InvalidFormatException, IOException {
-		ExcelDataReader reader = new ExcelDataReader();
-		cofgreader = new configReader();
-		String filepath = configReader.getexcelfilepath();
-		sheetname = cofgreader.getSheetName();
 
-		List<Map<String, String>> list = reader.getData(filepath, sheetname);
-
-		List<String> listWithValues = new ArrayList<>();
-
-		for (Map<String, String> row : list) {
-			String expectedResult = row.get(listName);
-			if (expectedResult != null) { // Avoid null values
-				listWithValues.add(expectedResult.trim());
-			}
-		}
-		return listWithValues;
-		
 }
