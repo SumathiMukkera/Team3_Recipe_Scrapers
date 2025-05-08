@@ -1,59 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="1" total="2" passed="0" failed="1" skipped="0">
+<testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-05-03T15:13:35 CDT" name="Default suite" finished-at="2025-05-03T15:13:43 CDT" duration-ms="7806">
+  <suite started-at="2025-05-08T17:06:30 CDT" name="Default suite" finished-at="2025-05-08T17:06:53 CDT" duration-ms="22205">
     <groups>
     </groups>
-    <test started-at="2025-05-03T15:13:35 CDT" name="Default test" finished-at="2025-05-03T15:13:43 CDT" duration-ms="7806">
-      <class name="com.TestNGtests.testsClass">
-        <test-method is-config="true" signature="setup()[pri:0, instance:com.TestNGtests.testsClass@3b0090a4]" started-at="2025-05-03T15:13:35 CDT" name="setup" finished-at="2025-05-03T15:13:39 CDT" duration-ms="3284" status="PASS">
+    <test started-at="2025-05-08T17:06:30 CDT" name="Default test" finished-at="2025-05-08T17:06:53 CDT" duration-ms="22205">
+      <class name="com.TestNGtests.RecipeScrapperTest">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T17:06:30 CDT" name="setup" finished-at="2025-05-08T17:06:39 CDT" duration-ms="8232" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="getAllrecipeListfromPage()[pri:0, instance:com.TestNGtests.testsClass@3b0090a4]" started-at="2025-05-03T15:13:39 CDT" name="getAllrecipeListfromPage" finished-at="2025-05-03T15:13:43 CDT" duration-ms="4476" status="FAIL">
-          <exception class="org.openqa.selenium.NoSuchElementException">
+        <test-method signature="scrapeRecipe()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T17:06:39 CDT" name="scrapeRecipe" finished-at="2025-05-08T17:06:53 CDT" duration-ms="13891" status="FAIL">
+          <exception class="org.postgresql.util.PSQLException">
             <message>
-              <![CDATA[no such element: Unable to locate element: {"method":"xpath","selector":"//span[text()='Close']"}
-  (Session info: chrome=135.0.7049.115)
-For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
-Build info: version: '4.31.0', revision: '1ef9f18787*'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.5'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [6b883e37c5b53b59522b0aaba69ca78b, findElement {value=//span[text()='Close'], using=xpath}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 135.0.7049.115, chrome: {chromedriverVersion: 135.0.7049.114 (63fd8a7d9d0..., userDataDir: C:\Users\rakhy\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:51881}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:51881/devtoo..., se:cdpVersion: 135.0.7049.115, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 6b883e37c5b53b59522b0aaba69ca78b]]>
+              <![CDATA[FATAL: password authentication failed for user "postgres"]]>
             </message>
             <full-stacktrace>
-              <![CDATA[org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//span[text()='Close']"}
-  (Session info: chrome=135.0.7049.115)
-For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
-Build info: version: '4.31.0', revision: '1ef9f18787*'
-System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.5'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [6b883e37c5b53b59522b0aaba69ca78b, findElement {value=//span[text()='Close'], using=xpath}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 135.0.7049.115, chrome: {chromedriverVersion: 135.0.7049.114 (63fd8a7d9d0..., userDataDir: C:\Users\rakhy\AppData\Loca...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:51881}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:51881/devtoo..., se:cdpVersion: 135.0.7049.115, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 6b883e37c5b53b59522b0aaba69ca78b
-at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
-at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
-at org.openqa.selenium.remote.ErrorCodec.decode(ErrorCodec.java:167)
-at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:138)
-at org.openqa.selenium.remote.codec.w3c.W3CHttpResponseCodec.decode(W3CHttpResponseCodec.java:50)
-at org.openqa.selenium.remote.HttpCommandExecutor.execute(HttpCommandExecutor.java:215)
-at org.openqa.selenium.remote.service.DriverCommandExecutor.invokeExecute(DriverCommandExecutor.java:216)
-at org.openqa.selenium.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:174)
-at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:545)
-at org.openqa.selenium.remote.ElementLocation$ElementFinder$2.findElement(ElementLocation.java:165)
-at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:59)
-at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:368)
-at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:362)
-at org.openqa.selenium.support.pagefactory.DefaultElementLocator.findElement(DefaultElementLocator.java:68)
-at org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler.invoke(LocatingElementHandler.java:38)
-at jdk.proxy2/jdk.proxy2.$Proxy12.click(Unknown Source)
-at com.pageObject.pageObjectclass.dismiss(pageObjectclass.java:47)
-at com.pageObject.pageObjectclass.clickRecipeList(pageObjectclass.java:40)
-at com.TestNGtests.testsClass.getAllrecipeListfromPage(testsClass.java:35)
+              <![CDATA[org.postgresql.util.PSQLException: FATAL: password authentication failed for user "postgres"
+at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:704)
+at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:213)
+at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268)
+at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54)
+at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273)
+at org.postgresql.Driver.makeConnection(Driver.java:446)
+at org.postgresql.Driver.connect(Driver.java:298)
+at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:682)
+at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:230)
+at com.TestNGtests.dataBaseClass.createDatabase(dataBaseClass.java:24)
+at com.pageObject.pageObjectclass.click_on_recipes_with_pagination(pageObjectclass.java:136)
+at com.TestNGtests.RecipeScrapperTest.scrapeRecipe(RecipeScrapperTest.java:25)
 at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -64,7 +40,7 @@ at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInv
 at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
 at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
 at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
 at org.testng.TestRunner.privateRun(TestRunner.java:741)
 at org.testng.TestRunner.run(TestRunner.java:616)
 at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
@@ -82,15 +58,15 @@ at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
 at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
 ]]>
             </full-stacktrace>
-          </exception> <!-- org.openqa.selenium.NoSuchElementException -->
+          </exception> <!-- org.postgresql.util.PSQLException -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- getAllrecipeListfromPage -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.TestNGtests.testsClass@3b0090a4]" started-at="2025-05-03T15:13:43 CDT" name="tearDown" finished-at="2025-05-03T15:13:43 CDT" duration-ms="2" status="PASS">
+        </test-method> <!-- scrapeRecipe -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T17:06:53 CDT" name="tearDown" finished-at="2025-05-08T17:06:53 CDT" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- com.TestNGtests.testsClass -->
+      </class> <!-- com.TestNGtests.RecipeScrapperTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
