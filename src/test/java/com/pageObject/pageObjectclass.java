@@ -91,9 +91,7 @@ public class pageObjectclass {
 	public List<WebElement> ingredientsList;
 	@FindBy(xpath = "//a[contains(text(), 'Next')]")
 	public WebElement nextPageButton;
-	//@FindBy(xpath = "//a[@class='page-link' and text()='Next']")
-	//public WebElement pageNextButton;
-	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
+		@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
 	WebElement recipeCategory;
 
 	@FindBy(xpath = "//p[text()='You are here: ']//span[3]//a")
@@ -239,28 +237,15 @@ public class pageObjectclass {
 				String recipeId = parts[parts.length - 1].replace("r", "");
 				System.out.println("Recipe ID: " + recipeId);
 
-				String recipetitle = "";
-
+				String recipetitle;
 				try {
-				    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-				    WebElement recipeTitleElement = wait.until(
-				        ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[@class='rec-heading']"))
-				    );
-
-				    recipetitle = recipeTitleElement.getText().replace("\n", "").trim();
-
+				    recipetitle = (recipeTitleElement != null) ? recipeTitleElement.getText().trim() : "Recipe title element is null";
 				    if (recipetitle.isEmpty()) {
 				        recipetitle = "Recipe title is empty";
 				    }
-
-				} catch (TimeoutException te) {
-				    recipetitle = "Recipe title fetch failed: Timeout";
-				} catch (NoSuchElementException ne) {
-				    recipetitle = "Recipe title element not found";
 				} catch (Exception ex) {
 				    recipetitle = "Recipe title fetch failed: " + ex.getClass().getSimpleName();
 				}
-
 				System.out.println("recipetitle: " + recipetitle);
 				
 				String preparationTime = preparation_time.getText();
