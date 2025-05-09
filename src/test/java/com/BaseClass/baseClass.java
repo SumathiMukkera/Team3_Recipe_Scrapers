@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
+import com.Utilities.configReader;
+
 public class baseClass {
 	   protected WebDriver driver;
 	    protected WebDriverWait wait;
@@ -37,7 +39,7 @@ public class baseClass {
 
 	        driver = new ChromeDriver(options); //  Create driver with options
 	        driver.manage().window().maximize();
-	        driver.get("https://www.tarladalal.com/");
+	        driver.get(configReader.getKeyValues("URL"));
 	        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 	    }
 
