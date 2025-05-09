@@ -21,14 +21,13 @@ public class dataBaseClass {
 	    }
 
 	    public void createDatabase() throws SQLException {
-	        Connection tempConn = DriverManager.getConnection(base_url, username, password);
-	        Statement stmt = tempConn.createStatement();
+	     try(   Connection tempConn = DriverManager.getConnection(base_url, username, password);
+	        Statement stmt = tempConn.createStatement()){
 	        String dropDbSQL = "DROP DATABASE IF EXISTS " + DB_name;
 	        stmt.executeUpdate(dropDbSQL);
 	        String createDbSQL = "CREATE DATABASE " + DB_name;
-	        stmt.executeUpdate(createDbSQL);
-	        stmt.close();
-	        tempConn.close();
+	        stmt.executeUpdate(createDbSQL);}
+	       
 	    }
 
 	    public void createTable(String tablename) throws SQLException {
@@ -89,4 +88,3 @@ public class dataBaseClass {
 	    }
 
 }
-
