@@ -41,7 +41,7 @@ public class configReader {
 	  return prop.getProperty("excelFilePath");
 	}	
 	
-	public  String getSheetName(String sheetname) {
+	public static String getSheetName(String sheetname) {
 		init_prop();
 		return prop.getProperty(sheetname);
 	}
