@@ -2,31 +2,25 @@ package com.pageObject;
 
 
 import java.io.IOException;
-
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
+import org.openqa.selenium.TimeoutException;
 
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.openqa.selenium.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import com.TestNGtests.dataBaseClass;
 import com.Utilities.ExcelDataReader;
 import com.Utilities.configReader;
@@ -245,24 +239,29 @@ public class pageObjectclass {
 				String recipeId = parts[parts.length - 1].replace("r", "");
 				System.out.println("Recipe ID: " + recipeId);
 
-				String recipetitle="";
+				String recipetitle = "";
+
 				try {
-					
-					if (recipeTitleElement.isDisplayed()) {
-						recipetitle = aboutrecipe.getText().replace("\n", "");
-					}
-				} catch (Exception ex) {
-					recipetitle = "Recipe Description is not listed";
-				}
-				   /* recipetitle = (recipeTitleElement != null) ? recipeTitleElement.getText().trim() : "Recipe title element is null";
+				    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+				    WebElement recipeTitleElement = wait.until(
+				        ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[@class='rec-heading']"))
+				    );
+
+				    recipetitle = recipeTitleElement.getText().replace("\n", "").trim();
+
 				    if (recipetitle.isEmpty()) {
 				        recipetitle = "Recipe title is empty";
 				    }
+
+				} catch (TimeoutException te) {
+				    recipetitle = "Recipe title fetch failed: Timeout";
+				} catch (NoSuchElementException ne) {
+				    recipetitle = "Recipe title element not found";
 				} catch (Exception ex) {
 				    recipetitle = "Recipe title fetch failed: " + ex.getClass().getSimpleName();
-				}*/
+				}
+
 				System.out.println("recipetitle: " + recipetitle);
-				
 				
 				String preparationTime = preparation_time.getText();
 				System.out.println(preparationTime);
