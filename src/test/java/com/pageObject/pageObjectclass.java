@@ -61,6 +61,7 @@ public class pageObjectclass {
 	    public static final String LFV_ADD = "Lettuce,kale,chard,arugula,spinach,cabbage,pumpkin,sweet potatoes,purple potatoes,yams,turnip,parsnip,karela,bittergourd,beet,carrot,cucumber,red onion,white onion,broccoli,cauliflower,carrot,celery,artichoke,bell pepper,mushroom,tomato,sweet and hot pepper,banana,mango,papaya,plantain,apple,orange,pineapple,pear,tangerine,all berry varieties,all melon varieties,peach,plum,nectarine,Avocado,Amaranth,Rajgira,Ramdana Barnyard,Sanwa,Samvat ke chawal buckwheat,kuttu finger millet,Ragi,Nachni foxtail millet,kangni,kakum kodu,kodon,little millet,moraiyo,kutki,shavan,sama pearl millet,bajra,broom corn millet,chena sorghum,jowar,Lentil,Pulse,Moong dhal,masoor dhal,toor dhal,urd dhal,lobia,rajma,matar,all forms of chana,almond,cashew,pistachio,brazil nut,walnut,pine nut,hazelnut,macadamia nut,pecan,peanut,hemp seed,sun flower seed,sesame seed,chia seed,flax seed";
 	    public static final String LFV_TO_ADD = "Butter,Ghee,salmon,mackerel,sardines";
 	    public static final String ALLERGY ="Milk,Soy,Egg,Sesame,Peanuts,walnut,almond,hazelnut,pecan,cashew,pistachio,Shell fish,Seafood";
+	    public static final String LCHF_ELEMINATE_FOOD_PROCESSING = "raw,steamed, boiled, porched,sauted,airfryed,pan fried"; 
 	    
 	    
 	    List<Recipe> allRecipesList = new ArrayList<Recipe>();
@@ -71,9 +72,10 @@ public class pageObjectclass {
 	List<Recipe> lfvToAddRecipes = new ArrayList<Recipe>();
 	List<Recipe> lfvAllergyRecipes  = new ArrayList<Recipe>();
 	List<Recipe> lchfAllergyRecipes  = new ArrayList<Recipe>();
+	List<Recipe> lchfEliminationRecipesFoodProcessing = new ArrayList<Recipe>();
 	
 	
-	String[] tableNames = { "recipes", "LCHFEliminatedRecipe","lchfAddRecipes","lfvEliminationRecipes","lfvAddRecipes","lfvToAddRecipes","lfvAllergyRecipes","lchfAllergyRecipes"}; 
+	String[] tableNames = { "recipes", "LCHFEliminatedRecipe","lchfAddRecipes","lfvEliminationRecipes","lfvAddRecipes","lfvToAddRecipes","lfvAllergyRecipes","lchfAllergyRecipes","lchfEliminationRecipesFoodProcessing"}; 
 
 	@FindBy(xpath = "//a[text()='Recipes List']")
 	public WebElement recipes_list;
@@ -191,6 +193,7 @@ public class pageObjectclass {
 		lfvToAddRecipes = filterRecipes(lfvEliminationRecipes,LFV_TO_ADD, false);
 		lfvAllergyRecipes=filterRecipes(lfvEliminationRecipes,ALLERGY,true);
 		lchfAllergyRecipes=filterRecipes(lchfEliminationRecipes,ALLERGY,true);
+		lchfEliminationRecipesFoodProcessing = filterRecipes(lchfEliminationRecipes,LCHF_ELEMINATE_FOOD_PROCESSING, true);
 				
 		System.out.println("******************************************************************");
 		System.out.println(lfvEliminationRecipes);
@@ -203,6 +206,8 @@ public class pageObjectclass {
 		System.out.println("******************************************************************");
 		System.out.println(lfvToAddRecipes);
 		System.out.println("******************************************************************");
+		System.out.println(lchfEliminationRecipesFoodProcessing);
+		System.out.println("******************************************************************");
 		insertRecipesIntoTable("recipes", allRecipesList);
 		insertRecipesIntoTable("lfvEliminationRecipes", lfvEliminationRecipes);// insert method to add values to the table
 		insertRecipesIntoTable("LCHFEliminatedRecipe", lchfEliminationRecipes);
@@ -211,6 +216,7 @@ public class pageObjectclass {
 		insertRecipesIntoTable("lfvToAddRecipes", lfvToAddRecipes);
 		insertRecipesIntoTable("lfvAllergyRecipes",lfvAllergyRecipes);
 		insertRecipesIntoTable("lchfAllergyRecipes",lchfAllergyRecipes);
+		insertRecipesIntoTable("lchfEliminationRecipesFoodProcessing",lchfEliminationRecipesFoodProcessing);
 		
 	}
 
