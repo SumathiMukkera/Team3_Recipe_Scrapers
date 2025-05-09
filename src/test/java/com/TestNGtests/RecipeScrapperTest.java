@@ -13,7 +13,7 @@ public class RecipeScrapperTest extends baseClass {
 	pageObjectclass page;
 
     @Test
-    void scrapeRecipe() throws SQLException, TimeoutException {
+    void scrapeRecipe() throws SQLException, TimeoutException, InvalidFormatException, IOException {
        
 
     	 page = new pageObjectclass(driver,wait);
