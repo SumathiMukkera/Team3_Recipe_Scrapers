@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,7 +16,7 @@ import org.testng.annotations.BeforeClass;
 public class baseClass {
 	   protected WebDriver driver;
 	    protected WebDriverWait wait;
-	    
+
 
 	    @BeforeClass
 	    public void setup() {
@@ -38,7 +39,9 @@ public class baseClass {
 	        options.addArguments("--remote-allow-origins=*");
 	          options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
 
-	        driver = new ChromeDriver(options); //  Create driver with options
+	      //  driver = new ChromeDriver(options); //  Create driver with options
+			WebDriverManager.chromedriver().setup();
+			driver = new ChromeDriver(options);
 	        driver.manage().window().maximize();
 	        driver.get("https://www.tarladalal.com/");
 	        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
