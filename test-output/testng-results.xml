@@ -2,20 +2,20 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-05-09T10:39:24 CDT" name="Default suite" finished-at="2025-05-09T11:13:38 CDT" duration-ms="2054148">
+  <suite started-at="2025-05-09T14:19:08 CDT" name="Default suite" finished-at="2025-05-09T15:00:28 CDT" duration-ms="2480053">
     <groups>
     </groups>
-    <test started-at="2025-05-09T10:39:24 CDT" name="Default test" finished-at="2025-05-09T11:13:38 CDT" duration-ms="2054148">
+    <test started-at="2025-05-09T14:19:08 CDT" name="Default test" finished-at="2025-05-09T15:00:28 CDT" duration-ms="2480053">
       <class name="com.TestNGtests.RecipeScrapperTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-09T10:39:24 CDT" name="setup" finished-at="2025-05-09T10:39:27 CDT" duration-ms="2871" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@37883b97]" started-at="2025-05-09T14:19:08 CDT" name="setup" finished-at="2025-05-09T14:19:16 CDT" duration-ms="8572" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="scrapeRecipe()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-09T10:39:27 CDT" name="scrapeRecipe" finished-at="2025-05-09T11:13:38 CDT" duration-ms="2051242" status="PASS">
+        <test-method signature="scrapeRecipe()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@37883b97]" started-at="2025-05-09T14:19:16 CDT" name="scrapeRecipe" finished-at="2025-05-09T15:00:25 CDT" duration-ms="2469091" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- scrapeRecipe -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-09T11:13:38 CDT" name="tearDown" finished-at="2025-05-09T11:13:38 CDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@37883b97]" started-at="2025-05-09T15:00:25 CDT" name="tearDown" finished-at="2025-05-09T15:00:28 CDT" duration-ms="2321" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->

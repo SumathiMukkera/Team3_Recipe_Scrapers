@@ -18,6 +18,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.TestNGtests.dataBaseClass;
 import com.Utilities.configReader;
+import com.Utilities.LoggerReader;
 
 public class pageObjectclass {
 
@@ -126,7 +127,7 @@ public class pageObjectclass {
 			js.executeScript("const elements = document.getElementsByClassName('adsbygoogle adsbygoogle-noablate');"
 					+ "while (elements.length > 0) elements[0].remove();");
 		} catch (Exception e) {
-			System.out.println("Ads removed" + e.getMessage());
+			LoggerReader.info("Ads removed" + e.getMessage());
 		}
 	}
 
@@ -137,7 +138,7 @@ public class pageObjectclass {
 				return true;
 			}
 		} catch (Exception e) {
-			System.out.println("Next page not available or failed to navigate: " + e.getMessage());
+			LoggerReader.info("Next page not available or failed to navigate: " + e.getMessage());
 		}
 		return false;
 	}
@@ -151,15 +152,14 @@ public class pageObjectclass {
 		for (String tableName : tableNames) {
 			db.createTable(tableName);
 		}
+		LoggerReader.info("Getting url from config Reader");
 		driver.get(configReader.getKeyValues("RecipeUrl"));
 		boolean hasNextPage;
 		int page = 1;
 
 		do {
-			System.out.println("Scraping Page: " + page);
-
+			LoggerReader.info("Scraping Page: " + page);
 			click_on_recipes(); // Scrape current page recipes
-
 			hasNextPage = navigateToNextPage(); // Try moving to next page
 			page++;
 
@@ -203,7 +203,7 @@ public class pageObjectclass {
 
 		int i = 0;
 		int recipeCount = recipes.size();
-		System.out.println("Found recipes count: " + recipeCount);
+		LoggerReader.info("Found recipes count: " + recipeCount);
 		do {
 			try {
 				String mainWindow = driver.getWindowHandle(); // save main window
@@ -235,13 +235,12 @@ public class pageObjectclass {
 				} catch (Exception ex) {
 					recipetitle = "Recipe title fetch failed: " + ex.getClass().getSimpleName();
 				}
-				System.out.println("recipetitle: " + recipetitle);
 
+				LoggerReader.info("recipetitle: " + recipetitle);
 				String preparationTime = preparation_time.getText();
-				System.out.println(preparationTime);
-
+				LoggerReader.info("preparationTime: " + preparationTime);
+				// cooking time
 				String cookingTime = cooking_time.getText();
-
 				String recipeDescription = "";
 				try {
 					if (aboutrecipe.isDisplayed()) {
@@ -250,8 +249,7 @@ public class pageObjectclass {
 				} catch (NoSuchElementException ex) {
 					recipeDescription = "Recipe Description is not listed";
 				}
-				System.out.println("RecipeDescription: " + recipeDescription);
-
+				LoggerReader.info("RecipeDescription: " + recipeDescription);
 				List<String> currentIngredients = new ArrayList<>();
 				for (WebElement ingredient : ingredientsList) {
 					String ingText = ingredient.getText().toLowerCase().trim();
@@ -264,7 +262,7 @@ public class pageObjectclass {
 				for (WebElement tag : tags) {
 					tagloca = tagloca + " " + tag.getText();
 				}
-				System.out.println("Recipe Tag:" + tagloca);
+				LoggerReader.info("Recipe Tag:" + tagloca);
 
 				String recipeCategory = "";
 				for (String recipeCategoryOption : RECIPE_CATEGORY_OPTIONS) {
@@ -274,19 +272,16 @@ public class pageObjectclass {
 					}
 				}
 
-				System.out.println("Recipe Category:" + recipeCategory);
-
+				LoggerReader.info("Recipe Category:" + recipeCategory);
 				String ingredientsName = String.join(" ", currentIngredients);
-				System.out.println("Ingredients Name : " + ingredientsName);
+				LoggerReader.info("Ingredients Name : " + ingredientsName);
 				// Prep_method
 				removeAds();
 				String prepMethodTxt = prepMethod.getText().replace("\n", "");
-				System.out.println("Preparation Method : " + prepMethodTxt);
-
+				LoggerReader.info("Preparation Method : " + prepMethodTxt);
 				// Nutrient Values
 				removeAds();
 				clickUsingJavascriptExecutor(nutrientValue);
-
 				String nutValues = "";
 				try {
 					if (nutrientTable.isDisplayed()) {
@@ -295,13 +290,13 @@ public class pageObjectclass {
 				} catch (NoSuchElementException ex) {
 					nutValues = "Nutrient values are not listed";
 				}
-				System.out.println("Nutrient Values: " + nutValues);
 
+				LoggerReader.info("Nutrient Values: " + nutValues);
 				// Recipe_URL
 				removeAds();
 				String recipeURL = driver.getCurrentUrl();
-				System.out.println("Recipe URL  :" + recipeURL);
 
+				LoggerReader.info("Recipe URL  :" + recipeURL);
 				String foodCategory = "Vegetarian";// by default food category is vegetarian
 				String combinedText = (tags + ingredientsName).toLowerCase();// combining tags and ingredientname for
 																				// filtering
@@ -318,10 +313,8 @@ public class pageObjectclass {
 				} else if (combinedText.contains("non-veg")) {
 					foodCategory = "Non-Veg";
 				}
-
-				System.out.println("Food Category : " + foodCategory);
-				System.out.println("Recipe Description: " + recipeDescription);
-
+				LoggerReader.info("Food Category : " + foodCategory);
+				LoggerReader.info("Recipe Description: " + recipeDescription);
 				String cusineCategory = "";
 				try {
 					if (cusine_category.isDisplayed()) {
@@ -330,7 +323,8 @@ public class pageObjectclass {
 				} catch (Exception ex) {
 					cusineCategory = "cusinecategory are not listed";
 				}
-				System.out.println("Cusine Category: " + cusineCategory);
+
+				LoggerReader.info("Cusine Category: " + cusineCategory);
 				Recipe recipe = new Recipe();
 				recipe.setRecipeID(recipeId);
 				recipe.setRecipeName(recipetitle);
@@ -354,7 +348,7 @@ public class pageObjectclass {
 				driver.switchTo().window(mainWindow);
 
 			} catch (Exception e) {
-				System.out.println("Exception: " + e.getMessage());
+				LoggerReader.info("Exception: " + e.getMessage());
 			}
 			i++;
 		} while (i < recipeCount);

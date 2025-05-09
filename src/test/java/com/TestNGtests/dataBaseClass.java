@@ -48,9 +48,9 @@ public class dataBaseClass {
 		}
 	}
 
-	/*
-	 * method to insert records into the database table
-	 */
+	
+	 // method to insert records into the database table
+	 
 
 	public void insertData(String tablename, String id, String title, String description, String ingredients,
 			String preparationTime, String cookingTime, String preparationMethod, String servings,
