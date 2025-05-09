@@ -1,6 +1,8 @@
 package com.BaseClass;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,22 +12,26 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 public class baseClass {
-	
-	 protected WebDriver driver;
+	   protected WebDriver driver;
 	    protected WebDriverWait wait;
+	    
 
 	    @BeforeClass
 	    public void setup() {
-	        ChromeOptions options = new ChromeOptions();
-	        options.addArguments("--blink-settings=imagesEnabled=false"); // Disable images
-	        options.addArguments("--disable-popup-blocking");
-	        options.addArguments("--disable-notifications");
+	    	ChromeOptions  options= new ChromeOptions();
+	    	 // Disable images
+	    	// Disable images using preferences
+	        Map<String, Object> prefs = new HashMap<>();
+	        prefs.put("profile.managed_default_content_settings.images", 2); // 2 = block
+	        options.setExperimentalOption("prefs", prefs);
+	       options.addArguments("--disable-popup-blocking");
+	       options.addArguments("--disable-notifications");
 	        options.addArguments("--disable-extensions");
 	        options.addArguments("--disable-dev-shm-usage");
-	        options.addArguments("--disable-software-rasterizer");
+	       options.addArguments("--disable-software-rasterizer");
 	        options.addArguments("--disable-gpu");
-	        options.addArguments("--no-sandbox");
-	       // options.addArguments("--headless"); // Optional: for headless execution
+	       options.addArguments("--no-sandbox");
+	      options.addArguments("--headless"); // Optional: for headless execution
 	        options.addArguments("--remote-allow-origins=*");
 	        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
 
@@ -37,9 +43,12 @@ public class baseClass {
 
 	    @AfterClass
 	    public void tearDown() {
-	       // if (driver != null) {
-	           // driver.quit();
+	        if (driver != null) {
+	            driver.quit();
 	        }
+	    
+	
 	    }
+	
 
-
+}
