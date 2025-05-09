@@ -102,7 +102,7 @@ public class pageObjectclass {
 	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
 	WebElement recipeCategory;
 
-	@FindBy(xpath = "//p[text()='You are here: ']//span[3]")
+	@FindBy(xpath = "//p[text()='You are here: ']//span[3]//a")
 	public WebElement cusine_category;
 	@FindBy(xpath = "//*[@id=\"aboutrecipe\"]/p[1]")
 	public WebElement aboutrecipe;
@@ -245,15 +245,22 @@ public class pageObjectclass {
 				String recipeId = parts[parts.length - 1].replace("r", "");
 				System.out.println("Recipe ID: " + recipeId);
 
-				String recipetitle;
+				String recipetitle="";
 				try {
-				    recipetitle = (recipeTitleElement != null) ? recipeTitleElement.getText().trim() : "Recipe title element is null";
+					
+					if (recipeTitleElement.isDisplayed()) {
+						recipetitle = aboutrecipe.getText().replace("\n", "");
+					}
+				} catch (Exception ex) {
+					recipetitle = "Recipe Description is not listed";
+				}
+				   /* recipetitle = (recipeTitleElement != null) ? recipeTitleElement.getText().trim() : "Recipe title element is null";
 				    if (recipetitle.isEmpty()) {
 				        recipetitle = "Recipe title is empty";
 				    }
 				} catch (Exception ex) {
 				    recipetitle = "Recipe title fetch failed: " + ex.getClass().getSimpleName();
-				}
+				}*/
 				System.out.println("recipetitle: " + recipetitle);
 				
 				
@@ -264,11 +271,11 @@ public class pageObjectclass {
 
 				String recipeDescription = "";
 				try {
-					if (nutrientTable.isDisplayed()) {
+					if (aboutrecipe.isDisplayed()) {
 						recipeDescription = aboutrecipe.getText().replace("\n", "");
 					}
 				} catch (NoSuchElementException ex) {
-					recipeDescription = "Recipe Descriptionare not listed";
+					recipeDescription = "Recipe Description is not listed";
 				}
 				System.out.println("RecipeDescription: " + recipeDescription);
 				
@@ -349,7 +356,7 @@ public class pageObjectclass {
 					if (cusine_category.isDisplayed()) {
 						cusineCategory = cusine_category.getText();
 					}
-				} catch (NoSuchElementException ex) {
+				} catch (Exception ex) {
 					cusineCategory = "cusinecategory are not listed";
 				}
 				System.out.println("Cusine Category: " + cusineCategory);
@@ -435,7 +442,7 @@ public class pageObjectclass {
 		ExcelDataReader reader = new ExcelDataReader();
 		cofgreader = new configReader();
 		String filepath = configReader.getexcelfilepath();
-		sheetname = cofgreader.getSheetName();
+		sheetname = configReader.getSheetName();
 
 		List<Map<String, String>> list = reader.getData(filepath, sheetname);
 

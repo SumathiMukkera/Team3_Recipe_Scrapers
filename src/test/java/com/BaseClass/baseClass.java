@@ -31,7 +31,7 @@ public class baseClass {
 	       options.addArguments("--disable-software-rasterizer");
 	        options.addArguments("--disable-gpu");
 	       options.addArguments("--no-sandbox");
-	      // options.addArguments("--headless"); // Optional: for headless execution
+	      options.addArguments("--headless"); // Optional: for headless execution
 	        options.addArguments("--remote-allow-origins=*");
 	        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
 
@@ -43,12 +43,12 @@ public class baseClass {
 
 	    @AfterClass
 	    public void tearDown() {
-	       // if (driver != null) {
-	           // driver.quit();
+	        if (driver != null) {
+	            driver.quit();
 	        }
 	    
 	
 	    }
 	
 
-//}
+}
