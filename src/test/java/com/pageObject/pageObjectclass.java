@@ -93,8 +93,8 @@ public class pageObjectclass {
 	public List<WebElement> ingredientsList;
 	@FindBy(xpath = "//a[contains(text(), 'Next')]")
 	public WebElement nextPageButton;
-	@FindBy(xpath = "//a[@class='page-link' and text()='Next']")
-	public WebElement pageNextButton;
+	//@FindBy(xpath = "//a[@class='page-link' and text()='Next']")
+	//public WebElement pageNextButton;
 	@FindBy(xpath = "//*[contains(text(), 'Breakfast')] | //*[contains(text(), 'Snacks')] | //*[contains(text(), 'Dinner')] | //*[contains(text(), 'Lunch')]")
 	WebElement recipeCategory;
 
@@ -145,8 +145,8 @@ public class pageObjectclass {
 
 	public boolean navigateToNextPage() {
 		try {
-			if (pageNextButton.isDisplayed() && pageNextButton.isEnabled()) {
-				clickUsingJavascriptExecutor(pageNextButton);
+			if ( nextPageButton.isDisplayed() &&  nextPageButton.isEnabled()) {
+				clickUsingJavascriptExecutor( nextPageButton);
 				return true;
 			}
 		} catch (Exception e) {
@@ -216,7 +216,7 @@ public class pageObjectclass {
 		System.out.println("Found recipes count: " + recipeCount);
 		do {
 		    try {
-				String mainWindow = driver.getWindowHandle(); // save main window
+		    	String mainWindow = driver.getWindowHandle(); // save main window
 
 				// Open recipe link in new tab using JS
 				js.executeScript("window.open(arguments[0]);", recipes.get(i).getAttribute("href"));
@@ -236,20 +236,23 @@ public class pageObjectclass {
 				String recipeId = parts[parts.length - 1].replace("r", "");
 				System.out.println("Recipe ID: " + recipeId);
 
-								String recipetitle = "";
+				String recipetitle;
 				try {
-					if (recipeTitleElement.isDisplayed()) {
-						recipetitle = recipeTitleElement.getText();
-					}
-				} catch (NoSuchElementException ex) {
-					recipetitle = "recipetitle are not listed";
+				    recipetitle = (recipeTitleElement != null) ? recipeTitleElement.getText().trim() : "Recipe title element is null";
+				    if (recipetitle.isEmpty()) {
+				        recipetitle = "Recipe title is empty";
+				    }
+				} catch (Exception ex) {
+				    recipetitle = "Recipe title fetch failed: " + ex.getClass().getSimpleName();
 				}
 				System.out.println("recipetitle: " + recipetitle);
 				
-				String cookingTime = cooking_time.getText();
+				
 				String preparationTime = preparation_time.getText();
 				System.out.println(preparationTime);
 				
+				String cookingTime = cooking_time.getText();
+
 				String recipeDescription = "";
 				try {
 					if (nutrientTable.isDisplayed()) {
@@ -341,8 +344,6 @@ public class pageObjectclass {
 					cusineCategory = "cusinecategory are not listed";
 				}
 				System.out.println("Cusine Category: " + cusineCategory);
-
-				
 
 				Recipe recipe = new Recipe();
 				recipe.setRecipeID(recipeId);
