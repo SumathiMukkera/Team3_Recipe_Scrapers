@@ -358,7 +358,7 @@ public class pageObjectclass {
 				recipe.setCuisineCategory(cusineCategory);
 				recipe.setRecipeDescription(recipeDescription);
 				recipe.setPreparationMethod(prepMethodTxt);
-				recipe.setNutritionValues("nutValues");
+				recipe.setNutritionValues(nutValues);
 				recipe.setRecipeUrl(recipeURL);
 				// Add to list
 				allRecipesList.add(recipe);
