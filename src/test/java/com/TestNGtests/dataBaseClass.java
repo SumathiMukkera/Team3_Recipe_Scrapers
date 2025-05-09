@@ -9,26 +9,25 @@ import java.sql.Statement;
 public class dataBaseClass {
 	
 	    private static final String base_url = "jdbc:postgresql://localhost:5432/";
-	    private static final String DB_name = "recipes_scraping";
+	    private static final String DB_name = "recipes_scarping";
 	    private static final String username = "postgres";
       private static final String password = "root";
 
 	    private Connection conn;
 
-	    public Connection connect() throws SQLException {
+	   public Connection connect() throws SQLException {
 	        conn = DriverManager.getConnection(base_url + DB_name, username, password);
 	        return conn;
 	    }
 
 	    public void createDatabase() throws SQLException {
-	        Connection tempConn = DriverManager.getConnection(base_url, username, password);
-	        Statement stmt = tempConn.createStatement();
+	     try(   Connection tempConn = DriverManager.getConnection(base_url, username, password);
+	        Statement stmt = tempConn.createStatement()){
 	        String dropDbSQL = "DROP DATABASE IF EXISTS " + DB_name;
 	        stmt.executeUpdate(dropDbSQL);
 	        String createDbSQL = "CREATE DATABASE " + DB_name;
-	        stmt.executeUpdate(createDbSQL);
-	        stmt.close();
-	        tempConn.close();
+	        stmt.executeUpdate(createDbSQL);}
+	       
 	    }
 
 	    public void createTable(String tablename) throws SQLException {
@@ -89,4 +88,3 @@ public class dataBaseClass {
 	    }
 
 }
-
