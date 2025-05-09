@@ -1,68 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-05-08T17:06:30 CDT" name="Default suite" finished-at="2025-05-08T17:06:53 CDT" duration-ms="22205">
+  <suite started-at="2025-05-08T18:43:40 CDT" name="Default suite" finished-at="2025-05-08T19:35:09 CDT" duration-ms="3089448">
     <groups>
     </groups>
-    <test started-at="2025-05-08T17:06:30 CDT" name="Default test" finished-at="2025-05-08T17:06:53 CDT" duration-ms="22205">
+    <test started-at="2025-05-08T18:43:40 CDT" name="Default test" finished-at="2025-05-08T19:35:09 CDT" duration-ms="3089448">
       <class name="com.TestNGtests.RecipeScrapperTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T17:06:30 CDT" name="setup" finished-at="2025-05-08T17:06:39 CDT" duration-ms="8232" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T18:43:40 CDT" name="setup" finished-at="2025-05-08T18:43:47 CDT" duration-ms="7667" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="scrapeRecipe()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T17:06:39 CDT" name="scrapeRecipe" finished-at="2025-05-08T17:06:53 CDT" duration-ms="13891" status="FAIL">
-          <exception class="org.postgresql.util.PSQLException">
-            <message>
-              <![CDATA[FATAL: password authentication failed for user "postgres"]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[org.postgresql.util.PSQLException: FATAL: password authentication failed for user "postgres"
-at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:704)
-at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:213)
-at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268)
-at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54)
-at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273)
-at org.postgresql.Driver.makeConnection(Driver.java:446)
-at org.postgresql.Driver.connect(Driver.java:298)
-at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:682)
-at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:230)
-at com.TestNGtests.dataBaseClass.createDatabase(dataBaseClass.java:24)
-at com.pageObject.pageObjectclass.click_on_recipes_with_pagination(pageObjectclass.java:136)
-at com.TestNGtests.RecipeScrapperTest.scrapeRecipe(RecipeScrapperTest.java:25)
-at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
-at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:687)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
-at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:995)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
-at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
-at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
-at org.testng.TestRunner.privateRun(TestRunner.java:741)
-at org.testng.TestRunner.run(TestRunner.java:616)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
-at org.testng.SuiteRunner.run(SuiteRunner.java:312)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
-at org.testng.TestNG.runSuites(TestNG.java:1112)
-at org.testng.TestNG.run(TestNG.java:1079)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-]]>
-            </full-stacktrace>
-          </exception> <!-- org.postgresql.util.PSQLException -->
+        <test-method signature="scrapeRecipe()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T18:43:47 CDT" name="scrapeRecipe" finished-at="2025-05-08T19:35:09 CDT" duration-ms="3081733" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- scrapeRecipe -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T17:06:53 CDT" name="tearDown" finished-at="2025-05-08T17:06:53 CDT" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.TestNGtests.RecipeScrapperTest@394df057]" started-at="2025-05-08T19:35:09 CDT" name="tearDown" finished-at="2025-05-08T19:35:09 CDT" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
